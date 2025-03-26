@@ -70,9 +70,15 @@ pools::charpools parsestring(std::string codetobeparsed) {
         {
             // Checkpoint! We know how to get a word!, now if we get space key, we store it and wordindex++! and do the keyscanning once again...
             characterindex = 0;
+            if (codetobeparsed[iterator-1] == ' ') {
+                wordindex++;
+                continue;
+            }
+
+            // wordindex++;
+            // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
             wordindex++;
-            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            wordindex++;
+            
             // if previous character is special symbol
             if (codetobeparsed[iterator] == ')') {
                 characterindex = 0;
@@ -99,7 +105,6 @@ pools::charpools parsestring(std::string codetobeparsed) {
             switch (codetobeparsed[iterator]) {
                 case '(':
                     wordindex++;
-                    characterindex = 0;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                     wordindex++;
                     characterindex = 0;
@@ -110,7 +115,6 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     characterindex = 0;
                     break;
                 case '{':
-                    wordindex++;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                     wordindex++;
                     characterindex = 0;
@@ -121,7 +125,6 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     characterindex = 0;
                     break;
                 case '[':
-                    wordindex++;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                     wordindex++;
                     characterindex = 0;
@@ -157,7 +160,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     // wordindex++;
                     characterindex = 0;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                    wordindex++;
+                    // wordindex++;
                     break;
                 default:
                     // If the previous checks did not complete, go to the next character in the array and set the key
