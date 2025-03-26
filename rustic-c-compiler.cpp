@@ -39,7 +39,7 @@ union pools {
     struct keywordpools {
     public:
         std::string keywordpool[64][64];
-        int compiledlength;
+        int codelength;
     };
 
     struct compiledpool {
@@ -124,7 +124,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     break;
                 case '{':
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                    // wordindex++;
+                    wordindex++;
                     characterindex = 0;
                     break;
                 case '}':
@@ -157,7 +157,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     break;
                 case '\n':
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                    wordindex++;
+                    // wordindex++;
                     characterindex = 0;
                     break;
                 case '\t':
@@ -204,10 +204,10 @@ pools::keywordpools lexobject(pools::charpools parsedobject, std::string rusticc
     int characterindex = 0;        // Character index iterator
 
     // Variable for string length
-    int codelength = rusticcline.length();
+    int stringlength = rusticcline.length();
 
     // Define variable for code length
-    keywordPool.compiledlength = codelength;
+    keywordPool.codelength = stringlength;
 
     // Counter for words in charpool 
     int wordcounter = 0;
