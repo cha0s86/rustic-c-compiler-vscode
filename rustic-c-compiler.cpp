@@ -294,10 +294,15 @@ int main(int argc, char* argv[]) {
 
     std::string filename;
 
-    
+    if (argc == 1) {
+        std::cout << "Error: No arguments passed." << std::endl;
+        return 1;
+    }
+    else if (argc == 2) {
+        std::cout << "Passed in: " << argv[1] << std::endl;
+    }
 
-    std::cout << "Enter source code file name: ";
-    cin >> filename;
+    filename = argv[1];
 
     std::fstream rusticcfile(filename.c_str());
 
