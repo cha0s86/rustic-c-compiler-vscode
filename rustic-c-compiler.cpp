@@ -69,10 +69,17 @@ pools::charpools parsestring(std::string codetobeparsed) {
         if (codetobeparsed[iterator] == dfkeys.dk_space)
         {
             // Checkpoint! We know how to get a word!, now if we get space key, we store it and wordindex++! and do the keyscanning once again...
-            // characterindex = 0;
-            // wordindex++;
-            // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+            characterindex = 0;
             wordindex++;
+            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+            wordindex++;
+            // if previous character is special symbol
+            if (codetobeparsed[iterator] == ')') {
+                characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+            } else {
+                // wordindex++;
+            }
             // increment the character index after skipping space so, that when we scan the next char we dont have the space.
             characterindex = 0; // Reset this to characterindex = 0
             // Iterate as long as the char is not null terminate character or space and not at the EOF and set the chars..
@@ -147,9 +154,10 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     characterindex = 0;
                     break;
                 case ' ':
+                    // wordindex++;
+                    characterindex = 0;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                     wordindex++;
-                    characterindex = 0;
                     break;
                 default:
                     // If the previous checks did not complete, go to the next character in the array and set the key
