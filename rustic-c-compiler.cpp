@@ -72,12 +72,16 @@ pools::charpools parsestring(std::string codetobeparsed) {
             characterindex = 0;
             if (codetobeparsed[iterator-1] == ' ') {
                 wordindex++;
-                continue;
+                break;
             }
 
             // wordindex++;
             // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            wordindex++;
+            if (codetobeparsed[iterator-1] == ')') {
+
+            } else {
+                wordindex++;
+            }
             
             // if previous character is special symbol
             if (codetobeparsed[iterator] == ')') {
@@ -104,6 +108,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
             // If we get semicolon, store it in charpool.
             switch (codetobeparsed[iterator]) {
                 case '(':
+                    characterindex = 0;
                     wordindex++;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                     wordindex++;
@@ -139,6 +144,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     wordindex++;
                     characterindex = 0;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
                     break;
                 case ',':
                     // We encountered a semicolon. store it in the array after wordindex++
@@ -160,7 +166,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     // wordindex++;
                     characterindex = 0;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                    // wordindex++;
+                    wordindex++;
                     break;
                 default:
                     // If the previous checks did not complete, go to the next character in the array and set the key
@@ -295,33 +301,30 @@ int main(int argc, char* argv[]) {
     std::string linearray[128];
 
     // Parse file to linearray
-    int linecount = 0;
+    int iterator;
+    int linecount = 7;
 
-    while (getline(rusticcfile, rusticcline)) {
-        // Check to see if rusticcfile is open
-        if (rusticcfile) {
-            // Set the linearray with lineindex to the line
-            linearray[linecount] = rusticcline + "\n";
-            linecount++;
+    for (iterator = 1; iterator <= linecount; iterator++) {
+        if (iterator == linecount) {
+            std::getline(rusticcfile, rusticcline);
+            linearray[iterator] = rusticcline;
+        } else if (iterator < linecount) {
+            std::getline(rusticcfile, rusticcline);
+            linearray[iterator] = rusticcline  + "\n";
         }
     }
-
-    // Print each line to console
-    //for (int lineiterator = 0; lineiterator < linecount; lineiterator++) {
-    //    std::cout << lineiterator << ": " << linearray[lineiterator];
-    //}
 
     // We got the lines... Now we need to combine them
 
     std::string concatenatedcode;
 
     // For every line in the linearray
-    for (int lineiterator = 0; lineiterator < linecount; lineiterator++) {
+    for (int lineiterator = 0; lineiterator <= linecount; lineiterator++) {
         // Set each line into concatenatedcode
         concatenatedcode += linearray[lineiterator];
     }
 
-    std::cout << "Compilation string: " << concatenatedcode << std::endl;
+    std::cout << "Compilation string: " << "\n" << concatenatedcode << std::endl;
 
     // Example print
     // std::cout << linearray[0] << "\n" << linearray[1] << "\n" << linearray[2] << "\n" << linearray[3] << "\n";
