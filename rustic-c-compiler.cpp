@@ -71,7 +71,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
         // Check for space bar, if we get space bar, store it in charpool.
         if (codetobeparsed[iterator] == dfkeys.dk_space)
         {
-            // Checkpoint! We know how to get a word!, now if we get space key, we store it and wordindex++! and do the keyscanning once again...
+            // If we get space key after a space key, we store it and wordindex++! and do the keyscanning  again...
             // characterindex = 0;
             if (codetobeparsed[iterator - 1] == ' ') {
                 // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
@@ -79,34 +79,22 @@ pools::charpools parsestring(std::string codetobeparsed) {
                 break;
             }
 
+            wordindex++;
+
             // wordindex++;
             // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            if (codetobeparsed[iterator - 1] == ')') {
-
-            }
-            else {
-                wordindex++;
-            }
+            // wordindex++;
 
             // if previous character is special symbol
-            if (codetobeparsed[iterator] == ')') {
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            }
-            else {
-                // wordindex++;
-            }
+            // if (codetobeparsed[iterator] == ')') {
+            //     characterindex = 0;
+            //     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+            // }
+            // else {
+            //     // wordindex++;
+            // }
             // increment the character index after skipping space so, that when we scan the next char we dont have the space.
-            characterindex = 0; // Reset this to characterindex = 0
-            // Iterate as long as the char is not null terminate character or space and not at the EOF and set the chars..
-            while (codetobeparsed[iterator] != dfkeys.dk_nullterminate && codetobeparsed[iterator] != dfkeys.dk_space)
-            {
-                // Set the keys
-                characterindex = 0;
-                iterator++;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                characterindex = 0;
-            }
+            characterindex = 0;
         }
         // Continue if we don't have space
         if (codetobeparsed[iterator] != dfkeys.dk_nullterminate)
