@@ -124,7 +124,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     break;
                 case '{':
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                    wordindex++;
+                    // wordindex++;
                     characterindex = 0;
                     break;
                 case '}':
@@ -147,7 +147,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
                     wordindex++;
                     characterindex = 0;
                     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                    wordindex++;
+                    //wordindex++;
                     break;
                 case ',':
                     // We encountered a semicolon. store it in the array after wordindex++

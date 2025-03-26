@@ -1,7 +1,1 @@
-#include <iostream>
-
-integer main() {
-	integer a = 0;
-	std::cout << "Hello, world!" << std::endl;
-	return 0;
-}
+integer main() { integer a = 0; return 0; }
