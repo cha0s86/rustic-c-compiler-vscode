@@ -296,13 +296,13 @@ int main(int argc, char* argv[]) {
 
     if (argc == 1) {
         std::cout << "Error: No arguments passed." << std::endl;
-        return 1;
+        // return 1;
     }
     else if (argc == 2) {
         std::cout << "Passed in: " << argv[1] << std::endl;
     }
 
-    filename = argv[1];
+    filename = "rusticc.rc";
 
     std::fstream rusticcfile(filename.c_str());
 
@@ -320,7 +320,7 @@ int main(int argc, char* argv[]) {
     rusticcfile.seekg(0);
 
     for (int iterator = 0; iterator <= linecount; iterator++) {
-        if (iterator == linecount) {
+        if (iterator == linecount-1) {
             getline(rusticcfile, rusticcline);
             linearray[iterator] = rusticcline;
         } else if (iterator < linecount) {

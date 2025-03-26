@@ -1,7 +1,7 @@
 #include <iostream>
 
 integer main() {
-	decimal a = 0;
+	integer a = 0;
 	std::cout << "Hello, world!" << std::endl;
 	return 0;
 }
