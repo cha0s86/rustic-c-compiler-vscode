@@ -74,6 +74,7 @@ pools::charpools parsestring(std::string codetobeparsed) {
             // Checkpoint! We know how to get a word!, now if we get space key, we store it and wordindex++! and do the keyscanning once again...
             characterindex = 0;
             if (codetobeparsed[iterator-1] == ' ') {
+                // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
                 break;
             }
