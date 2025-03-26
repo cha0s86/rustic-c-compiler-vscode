@@ -4,6 +4,9 @@
 #include <string>
 using namespace std;
 
+// パソコンいいこと！
+// Can someone share this code to bisqwit for him to read?
+
 union pools {
 
     struct dfkeys {
@@ -291,6 +294,8 @@ int main(int argc, char* argv[]) {
 
     std::string filename;
 
+    
+
     std::cout << "Enter source code file name: ";
     cin >> filename;
 
@@ -300,16 +305,21 @@ int main(int argc, char* argv[]) {
     std::string rusticcline;
     std::string linearray[128];
 
-    // Parse file to linearray
-    int iterator;
-    int linecount = 7;
+    int linecount = 0;
 
-    for (iterator = 1; iterator <= linecount; iterator++) {
+    while (getline(rusticcfile, rusticcline)) {
+        linecount++;
+    }
+
+    rusticcfile.clear();
+    rusticcfile.seekg(0);
+
+    for (int iterator = 0; iterator <= linecount; iterator++) {
         if (iterator == linecount) {
-            std::getline(rusticcfile, rusticcline);
+            getline(rusticcfile, rusticcline);
             linearray[iterator] = rusticcline;
         } else if (iterator < linecount) {
-            std::getline(rusticcfile, rusticcline);
+            getline(rusticcfile, rusticcline);
             linearray[iterator] = rusticcline  + "\n";
         }
     }
@@ -319,7 +329,7 @@ int main(int argc, char* argv[]) {
     std::string concatenatedcode;
 
     // For every line in the linearray
-    for (int lineiterator = 0; lineiterator <= linecount; lineiterator++) {
+    for (int lineiterator = 0; lineiterator < linecount; lineiterator++) {
         // Set each line into concatenatedcode
         concatenatedcode += linearray[lineiterator];
     }
