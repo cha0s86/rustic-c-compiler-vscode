@@ -315,7 +315,7 @@ int main(int argc, char* argv[]) {
     rusticcfile.seekg(0);
 
     for (int iterator = 0; iterator <= linecount; iterator++) {
-        if (iterator == linecount) {
+        if (iterator == linecount-1) {
             getline(rusticcfile, rusticcline);
             linearray[iterator] = rusticcline;
         } else if (iterator < linecount) {
