@@ -33,7 +33,7 @@ union pools {
 
     struct charpools {
     public:
-        std::string charpool[64][64];
+        std::string charpool[128][64];
     };
 
     struct keywordpools {
@@ -66,99 +66,51 @@ pools::charpools parsestring(std::string codetobeparsed) {
     // Create parser for dividing string into keywords and storing them in an array.
 
     // While codetobeparsed[iterator] doesn't equal nullterminate character ('\0')
-    while (codetobeparsed[iterator] != dfkeys.dk_nullterminate)
+    for (iterator = 0; codetobeparsed[iterator] != dfkeys.dk_nullterminate; iterator++)
     {
         // Check for space bar, if we get space bar, store it in charpool.
-        if (codetobeparsed[iterator] == dfkeys.dk_space)
-        {
-            // Checkpoint! We know how to get a word!, now if we get space key, we store it and wordindex++! and do the keyscanning once again...
-            // characterindex = 0;
-            if (codetobeparsed[iterator - 1] == ' ') {
-                // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
-                break;
-            }
 
-            // wordindex++;
-            // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            if (codetobeparsed[iterator - 1] == ')') {
-
-            }
-            else {
-                wordindex++;
-            }
-
-            // if previous character is special symbol
-            if (codetobeparsed[iterator] == ')') {
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            }
-            else {
-                // wordindex++;
-            }
-            // increment the character index after skipping space so, that when we scan the next char we dont have the space.
-            characterindex = 0; // Reset this to characterindex = 0
-            // Iterate as long as the char is not null terminate character or space and not at the EOF and set the chars..
-            while (codetobeparsed[iterator] != dfkeys.dk_nullterminate && codetobeparsed[iterator] != dfkeys.dk_space)
-            {
-                // Set the keys
-                characterindex = 0;
-                iterator++;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                characterindex = 0;
-            }
-        }
-        // Continue if we don't have space
         if (codetobeparsed[iterator] != dfkeys.dk_nullterminate)
         {
             // If we get semicolon, store it in charpool.
             switch (codetobeparsed[iterator]) {
             case '(':
                 characterindex = 0;
-                wordindex++;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
-                characterindex = 0;
                 break;
             case ')':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case '{':
+                characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
-                characterindex = 0;
                 break;
             case '}':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case '[':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case ']':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case ';':
-                // We encountered a semicolon. store it in the array after wordindex++
-                wordindex++;
+                // wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
                 break;
             case ',':
-                // We encountered a semicolon. store it in the array after wordindex++
-                wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case '\n':
+                // wordindex++;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
                 characterindex = 0;
@@ -169,7 +121,6 @@ pools::charpools parsestring(std::string codetobeparsed) {
                 characterindex = 0;
                 break;
             case ' ':
-                // wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
@@ -181,10 +132,33 @@ pools::charpools parsestring(std::string codetobeparsed) {
                 characterindex++;
                 break;
             }
+
+            // After setting the key, check for if next character is special key, and wordindex++!
+            if (codetobeparsed[iterator+1] == '('
+                || codetobeparsed[iterator+1] == ')'
+                || codetobeparsed[iterator+1] == '{'
+                || codetobeparsed[iterator+1] == '}'
+                || codetobeparsed[iterator+1] == '['
+                || codetobeparsed[iterator+1] == ']'
+                || codetobeparsed[iterator+1] == ';'
+                || codetobeparsed[iterator+1] == ','
+                || codetobeparsed[iterator+1] == ' ')
+            {  
+                characterindex = 0;
+                // wordindex++;
+                // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                // Note to self: if we have encountered parsing error probably updated wordindex incorrectly.
+                if (codetobeparsed[iterator] != ' ' && codetobeparsed[iterator] != '\n' && codetobeparsed[iterator] != '{' && codetobeparsed[iterator] != ';')
+                {
+                    wordindex++;
+                }
+            } else if (codetobeparsed[iterator+1] == ' ') {
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                wordindex++;
+                // characterindex = 0;
+            }
         }
 
-        // Increment the iterator to scan the next word.
-        iterator++;
     }
 
     return charPool;
