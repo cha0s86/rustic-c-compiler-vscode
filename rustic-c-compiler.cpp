@@ -73,26 +73,76 @@ pools::charpools parsestring(std::string codetobeparsed) {
         {
             // If we get space key after a space key, we store it and wordindex++! and do the keyscanning  again...
             // characterindex = 0;
-            if (codetobeparsed[iterator - 1] == ' ') {
-                // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
-                break;
-            }
+            switch (codetobeparsed[iterator]) {
+                case '(':
+                    characterindex = 0;
+                    wordindex++;
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case ')':
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case '{':
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case '}':
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case '[':
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case ']':
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case ';':
+                    // We encountered a semicolon. store it in the array after wordindex++
+                    wordindex++;
+                    characterindex = 0;
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    break;
+                case ',':
+                    // We encountered a semicolon. store it in the array after wordindex++
+                    wordindex++;
+                    characterindex = 0;
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    break;
+                case '\n':
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case '\t':
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    characterindex = 0;
+                    break;
+                case ' ':
+                    // wordindex++;
+                    characterindex = 0;
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    wordindex++;
+                    break;
+                default:
+                    // If the previous checks did not complete, go to the next character in the array and set the key
+                    // just set the character as usual.
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    characterindex++;
+                    break;
+                }
 
-            if (codetobeparsed[iterator] == ' ') {
-                wordindex++;
-            } else {
-                wordindex++;
-            }
-
-            if (codetobeparsed[iterator] == ')') {
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            }
-            else {
-                // wordindex++;
-            }
-            
 
             // wordindex++;
             // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
