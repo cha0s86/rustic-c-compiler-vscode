@@ -33,7 +33,7 @@ union pools {
 
     struct charpools {
     public:
-        std::string charpool[64][64];
+        std::string charpool[128][64];
     };
 
     struct keywordpools {
@@ -66,87 +66,51 @@ pools::charpools parsestring(std::string codetobeparsed) {
     // Create parser for dividing string into keywords and storing them in an array.
 
     // While codetobeparsed[iterator] doesn't equal nullterminate character ('\0')
-    while (codetobeparsed[iterator] != dfkeys.dk_nullterminate)
+    for (iterator = 0; codetobeparsed[iterator] != dfkeys.dk_nullterminate; iterator++)
     {
         // Check for space bar, if we get space bar, store it in charpool.
-        if (codetobeparsed[iterator] == dfkeys.dk_space)
-        {
-            // If we get space key after a space key, we store it and wordindex++! and do the keyscanning  again...
-            // characterindex = 0;
-            if (codetobeparsed[iterator - 1] == ' ') {
-                // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
-                break;
-            }
 
-            wordindex++;
-
-            // wordindex++;
-            // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            // wordindex++;
-
-            // if previous character is special symbol
-            // if (codetobeparsed[iterator] == ')') {
-            //     characterindex = 0;
-            //     charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-            // }
-            // else {
-            //     // wordindex++;
-            // }
-            // increment the character index after skipping space so, that when we scan the next char we dont have the space.
-            characterindex = 0;
-        }
-        // Continue if we don't have space
         if (codetobeparsed[iterator] != dfkeys.dk_nullterminate)
         {
             // If we get semicolon, store it in charpool.
             switch (codetobeparsed[iterator]) {
             case '(':
                 characterindex = 0;
-                wordindex++;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
-                characterindex = 0;
                 break;
             case ')':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case '{':
+                characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
-                characterindex = 0;
                 break;
             case '}':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case '[':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case ']':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case ';':
-                // We encountered a semicolon. store it in the array after wordindex++
-                wordindex++;
+                // wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
                 break;
             case ',':
-                // We encountered a semicolon. store it in the array after wordindex++
-                wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case '\n':
+                // wordindex++;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
                 characterindex = 0;
@@ -157,7 +121,6 @@ pools::charpools parsestring(std::string codetobeparsed) {
                 characterindex = 0;
                 break;
             case ' ':
-                // wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
@@ -169,10 +132,33 @@ pools::charpools parsestring(std::string codetobeparsed) {
                 characterindex++;
                 break;
             }
+
+            // After setting the key, check for if next character is special key, and wordindex++!
+            if (codetobeparsed[iterator+1] == '('
+                || codetobeparsed[iterator+1] == ')'
+                || codetobeparsed[iterator+1] == '{'
+                || codetobeparsed[iterator+1] == '}'
+                || codetobeparsed[iterator+1] == '['
+                || codetobeparsed[iterator+1] == ']'
+                || codetobeparsed[iterator+1] == ';'
+                || codetobeparsed[iterator+1] == ','
+                || codetobeparsed[iterator+1] == ' ')
+            {  
+                characterindex = 0;
+                // wordindex++;
+                // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                // Note to self: if we have encountered parsing error probably updated wordindex incorrectly.
+                if (codetobeparsed[iterator] != ' ' && codetobeparsed[iterator] != '\n' && codetobeparsed[iterator] != '{' && codetobeparsed[iterator] != ';')
+                {
+                    wordindex++;
+                }
+            } else if (codetobeparsed[iterator+1] == ' ') {
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                wordindex++;
+                // characterindex = 0;
+            }
         }
 
-        // Increment the iterator to scan the next word.
-        iterator++;
     }
 
     return charPool;
@@ -293,13 +279,13 @@ int main(int argc, char* argv[]) {
         std::cout << "Passed in: " << argv[1] << std::endl;
     }
 
-    filename = "rusticc2.rc";
+    filename = argv[1];
 
     std::fstream rusticcfile(filename.c_str());
 
     // Read file
     std::string rusticcline;
-    std::string linearray[128];
+    std::string linearray[64];
 
     int linecount = 0;
 
@@ -333,15 +319,6 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Compilation string: " << "\n" << concatenatedcode << std::endl;
 
-    // Example print
-    // std::cout << linearray[0] << "\n" << linearray[1] << "\n" << linearray[2] << "\n" << linearray[3] << "\n";
-
-    // std::cout << concatenatedcode << std::endl;
-
-    // std::cout << "Combined string: " << linearray[0] << "\n" << linearray[1] << "\n" << linearray[2] << "\n" << linearray[3];
-
-    // The language is basically just c++, but "int" is "integer" and "float" is "decimal".
-
     // Pass the source to the parse code function and include it in the parsedobject object
     pools::charpools parsedobject = parsestring(concatenatedcode);
 
@@ -355,12 +332,6 @@ int main(int argc, char* argv[]) {
 
     // Compiler
     pools::compiledpool compiledobj = compile(lexedobject);
-
-    // Print rustic-c string
-    // std::cout << "rustic c code:      " << rusticcline << std::endl;
-
-    // Print the compiled code
-    // std::cout << "translated c++ code:  " << compiledobj.compiledstring[0][0] << std::endl;
 
     // Create file
     std::ofstream cppfile("compiledcode.cpp");
