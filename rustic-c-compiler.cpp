@@ -291,6 +291,6 @@ int main(int argc, char* argv[]) {
     // Pause
     system("pause");
 
-    // return the exit code, (you'll exit the matrix if you input 420 lol)... shushh...     
+    // return the exit code, (you'll exit the matrix if you code well!)     
     return 0;
 }
