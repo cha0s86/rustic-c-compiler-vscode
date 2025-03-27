@@ -161,7 +161,6 @@ pools::charpools parsestring(std::string codetobeparsed) {
 
     }
 
-    
     return charPool;
 }
 
