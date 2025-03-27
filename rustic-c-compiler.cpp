@@ -277,10 +277,10 @@ int main(int argc, char* argv[]) {
     pools::compiledobject compiledobj = compile(lexedobject);
 
     // Create file
-    std::ofstream cppfile("compiledcode.cpp");
+    std::ofstream cppfile("output.cpp");
 
     // Print writing to file
-    std::cout << "writing to file compiledcode.cpp..." << std::endl;
+    std::cout << "Writing to file compiledcode.cpp..." << std::endl;
 
     // Write to file
     cppfile << compiledobj.compiledstring[0][0];
