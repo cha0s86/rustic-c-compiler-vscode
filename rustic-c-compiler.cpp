@@ -79,7 +79,20 @@ pools::charpools parsestring(std::string codetobeparsed) {
                 break;
             }
 
-            wordindex++;
+            if (codetobeparsed[iterator] == ' ') {
+                wordindex++;
+            } else {
+                wordindex++;
+            }
+
+            if (codetobeparsed[iterator] == ')') {
+                characterindex = 0;
+                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+            }
+            else {
+                // wordindex++;
+            }
+            
 
             // wordindex++;
             // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
@@ -293,7 +306,7 @@ int main(int argc, char* argv[]) {
         std::cout << "Passed in: " << argv[1] << std::endl;
     }
 
-    filename = "rusticc2.rc";
+    filename = "rusticc.rc";
 
     std::fstream rusticcfile(filename.c_str());
 
@@ -333,15 +346,6 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Compilation string: " << "\n" << concatenatedcode << std::endl;
 
-    // Example print
-    // std::cout << linearray[0] << "\n" << linearray[1] << "\n" << linearray[2] << "\n" << linearray[3] << "\n";
-
-    // std::cout << concatenatedcode << std::endl;
-
-    // std::cout << "Combined string: " << linearray[0] << "\n" << linearray[1] << "\n" << linearray[2] << "\n" << linearray[3];
-
-    // The language is basically just c++, but "int" is "integer" and "float" is "decimal".
-
     // Pass the source to the parse code function and include it in the parsedobject object
     pools::charpools parsedobject = parsestring(concatenatedcode);
 
@@ -355,12 +359,6 @@ int main(int argc, char* argv[]) {
 
     // Compiler
     pools::compiledpool compiledobj = compile(lexedobject);
-
-    // Print rustic-c string
-    // std::cout << "rustic c code:      " << rusticcline << std::endl;
-
-    // Print the compiled code
-    // std::cout << "translated c++ code:  " << compiledobj.compiledstring[0][0] << std::endl;
 
     // Create file
     std::ofstream cppfile("compiledcode.cpp");
