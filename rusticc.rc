@@ -1,4 +1,6 @@
+#include <iostream>
+
 integer main() {
-	decimal a = 0;
+	std::cout << "Hello, world!" << std::endl;
 	return 0;
 }
