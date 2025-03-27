@@ -33,13 +33,12 @@ union pools {
 
     struct charpools {
     public:
-        std::string charpool[128][64];
+        std::string charpool[64][64];
     };
 
     struct keywordpools {
     public:
         std::string keywordpool[64][64];
-        int codelength;
     };
 
     struct compiledpool {
@@ -183,8 +182,10 @@ pools::keywordpools lexobject(pools::charpools parsedobject, std::string rusticc
     // Variable for string length
     int stringlength = rusticcline.length();
 
+    int codelength;
+
     // Define variable for code length
-    keywordPool.codelength = stringlength;
+    codelength = stringlength;
 
     // Counter for words in charpool 
     int wordcounter = 0;
@@ -213,7 +214,7 @@ pools::keywordpools lexobject(pools::charpools parsedobject, std::string rusticc
         // If we get a space, wordindex++ and reset characterindex and go for the next word
         if (parsedobject.charpool[wordindex][characterindex] == dfkeys.dk_space2) {
             // Here we can decide if we want to include spaces or not
-            keywordPool.keywordpool[wordindex][0] = dfkeys.dk_space2; // Comment out this line to not include spaces
+            keywordPool.keywordpool[wordindex][0] = dfkeys.dk_space; // Comment out this line to not include spaces
             // Increment wordindex, for getting the next word since space is only 1-letter.
             wordindex++;
             // After setting the key, just reset characterindex for the next character.
@@ -239,12 +240,12 @@ pools::compiledpool compile(pools::keywordpools lexedobject) {
     // check if data types found and convert them
     for (int iterator = 0; lexedobject.keywordpool[iterator][0] != "\0"; iterator++) {
 
-        if (lexedobject.keywordpool[iterator][0] == "integer") {
-            lexedobject.keywordpool[iterator][0] = "int";
+        if (lexedobject.keywordpool[iterator][0]  == "integer") {
+            lexedobject.keywordpool[iterator][0]  = "int";
         }
 
-        if (lexedobject.keywordpool[iterator][0] == "decimal") {
-            lexedobject.keywordpool[iterator][0] = "float";
+        if (lexedobject.keywordpool[iterator][0]  == "decimal") {
+            lexedobject.keywordpool[iterator][0]  = "float";
         }
     }
 
@@ -279,7 +280,8 @@ int main(int argc, char* argv[]) {
         std::cout << "Passed in: " << argv[1] << std::endl;
     }
 
-    filename = argv[1];
+    //filename = argv[1];
+    filename = "rusticc.rc";
 
     std::fstream rusticcfile(filename.c_str());
 
