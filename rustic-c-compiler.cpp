@@ -59,28 +59,23 @@ pools::charpool parsestring(std::string codetobeparsed) {
             case '{':
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 break;
             case '}':
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 break;
             case '[':
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 break;
             case ']':
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 break;
             case ';':
                 // wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 break;
             case ',':
                 characterindex = 0;
@@ -89,18 +84,15 @@ pools::charpool parsestring(std::string codetobeparsed) {
             case '\n':
                 // wordindex++;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
                 break;
             case '\t':
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 characterindex = 0;
                 break;
             case ' ':
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
                 break;
             default:
                 // If the previous checks did not complete, go to the next character in the array and set the key
@@ -123,19 +115,51 @@ pools::charpool parsestring(std::string codetobeparsed) {
                 || codetobeparsed[iterator+1] == '\n'
                 || codetobeparsed[iterator+1] == '\t'
                 || codetobeparsed[iterator+1] == ' ')
-            {  
+            {
+
                 characterindex = 0;
                 // wordindex++;
                 // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                // If the current character is special character AND the next one is one also.
-                if (codetobeparsed[iterator] != ' '
-                    && codetobeparsed[iterator] != '{'
-                    && codetobeparsed[iterator] != '}'
-                    && codetobeparsed[iterator] != ';'
-                    && codetobeparsed[iterator] != '\n')
-                {
-                    wordindex++;
+                // If the current character is space or special character AND the next one is space one also.
+                switch (codetobeparsed[iterator]) {
+                    case '(':
+                        wordindex++;
+                        break;
+                    case ')':
+                        wordindex++;
+                        break;
+                    case '{':
+                        wordindex++;
+                        break;
+                    case '}':
+                        wordindex++;
+                        break;
+                    case '[':
+                        wordindex++;
+                        break;
+                    case ']':
+                        wordindex++;
+                        break;
+                    case ';':
+                        wordindex++;
+                        break;
+                    case ',':
+                        wordindex++;
+                        break;
+                    case '\n':
+                        wordindex++;
+                        break;
+                    case '\t':
+                        wordindex++;
+                        break;
+                    case ' ':
+                        wordindex++;
+                        break;
+                    default:
+                        wordindex++;
+                        break;
                 }
+                // Check if we have multiple spaces
             } else if (codetobeparsed[iterator+1] == ' ') {
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 wordindex++;
@@ -233,7 +257,7 @@ int main(int argc, char* argv[]) {
 
     std::string filename;
 
-    std::cout << "Enter source code file name: ";
+    std::cout << "Enter .rc source code filename: ";
     cin >> filename;
 
     std::fstream rusticcfile(filename);
