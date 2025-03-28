@@ -82,22 +82,31 @@ pools::charpool lex(std::string codetobelexed) {
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case '\n':
-                for (int multicharctr = 0; charPool.charpool[wordindex][iterator+1] == "\n"; multicharctr) {
-                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+            for (iterator; codetobelexed[iterator+1] == '\n'; iterator++) {
+                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
                     wordindex++;
                 }
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 characterindex = 0;
+                wordindex++;
                 break;
             case '\t':
+                for (iterator; codetobelexed[iterator+1] == '\t'; iterator++) {
+                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
+                    wordindex++;
+                }
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                wordindex++;
                 characterindex = 0;
+                wordindex++;
                 break;
             case ' ':
+                for (iterator; codetobelexed[iterator+1] == ' '; iterator++) {
+                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
+                    wordindex++;
+                }
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                wordindex++;
                 characterindex = 0;
+                wordindex++;
                 break;
             default:
                 // If the previous checks did not complete, go to the next character in the array and set the key
@@ -151,10 +160,10 @@ pools::charpool lex(std::string codetobelexed) {
                         wordindex++;
                         break;
                     case '\n':
-                        wordindex++;
+                        // wordindex++;
                         break;
                     case '\t':
-                        wordindex++;
+                        // wordindex++;
                         break;
                     case ' ':
                         // wordindex++;
