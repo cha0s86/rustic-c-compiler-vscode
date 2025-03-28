@@ -82,6 +82,10 @@ pools::charpool lex(std::string codetobelexed) {
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case '\n':
+                for (int multicharctr = 0; charPool.charpool[wordindex][iterator+1] == "\n"; multicharctr) {
+                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                    wordindex++;
+                }
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 characterindex = 0;
                 break;
@@ -91,9 +95,9 @@ pools::charpool lex(std::string codetobelexed) {
                 characterindex = 0;
                 break;
             case ' ':
-                characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 wordindex++;
+                characterindex = 0;
                 break;
             default:
                 // If the previous checks did not complete, go to the next character in the array and set the key
@@ -147,25 +151,10 @@ pools::charpool lex(std::string codetobelexed) {
                         wordindex++;
                         break;
                     case '\n':
-                        switch (codetobelexed[iterator]) {
-                            case '\n':
-                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                                wordindex++;
-                                break;
-                            default:
-                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                                break;
-                        }
+                        wordindex++;
                         break;
                     case '\t':
-                        switch (codetobelexed[iterator]) {
-                            case '\t':
-                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                                wordindex++;
-                                break;
-                            default:
-                                wordindex++;
-                        }
+                        wordindex++;
                         break;
                     case ' ':
                         // wordindex++;
