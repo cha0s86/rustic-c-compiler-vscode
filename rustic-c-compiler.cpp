@@ -115,7 +115,6 @@ pools::charpool lex(std::string codetobelexed) {
                 || codetobelexed[iterator+1] == '\t'
                 || codetobelexed[iterator+1] == ' ')
             {
-
                 characterindex = 0;
                 // wordindex++;
                 // charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
@@ -152,7 +151,8 @@ pools::charpool lex(std::string codetobelexed) {
                                 wordindex++;
                                 break;
                             default:
-                                wordindex++;
+                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                                break;
                         }
                         break;
                     case '\t':
