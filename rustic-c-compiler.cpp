@@ -93,6 +93,7 @@ pools::charpool parsestring(std::string codetobeparsed) {
             case ' ':
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                wordindex++;
                 break;
             default:
                 // If the previous checks did not complete, go to the next character in the array and set the key
@@ -153,17 +154,13 @@ pools::charpool parsestring(std::string codetobeparsed) {
                         wordindex++;
                         break;
                     case ' ':
-                        wordindex++;
+                        // wordindex++;
                         break;
                     default:
                         wordindex++;
                         break;
                 }
                 // Check if we have multiple spaces
-            } else if (codetobeparsed[iterator+1] == ' ') {
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
-                // characterindex = 0;
             }
         }
 
