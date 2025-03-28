@@ -25,10 +25,9 @@ union pools {
     };
 };
 
-pools::charpool parsestring(std::string codetobeparsed) {
+pools::charpool lex(std::string codetobelexed) {
 
-    // Parser / Lexical analyzer
-    // Parser: a computer program that breaks down text into recognized strings of characters for further analysis.
+    // Lexer
 
     // Create object for accessing pools
     pools::charpool charPool;
@@ -39,89 +38,88 @@ pools::charpool parsestring(std::string codetobeparsed) {
 
     // Create parser for dividing string into keywords and storing them in an array.
 
-    // While codetobeparsed[iterator] doesn't equal nullterminate character ('\0')
-    for (iterator = 0; codetobeparsed[iterator] != '\0'; iterator++)
+    // While codetobelexed[iterator] doesn't equal nullterminate character ('\0')
+    for (iterator = 0; codetobelexed[iterator] != '\0'; iterator++)
     {
         // Check for space bar, if we get space bar, store it in charpool.
 
-        if (codetobeparsed[iterator] != '\0')
+        if (codetobelexed[iterator] != '\0')
         {
             // If we get semicolon, store it in charpool.
-            switch (codetobeparsed[iterator]) {
+            switch (codetobelexed[iterator]) {
             case '(':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case ')':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case '{':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case '}':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case '[':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case ']':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case ';':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case ',':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 break;
             case '\n':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 characterindex = 0;
                 break;
             case '\t':
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 characterindex = 0;
                 break;
             case ' ':
                 characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 wordindex++;
                 break;
             default:
                 // If the previous checks did not complete, go to the next character in the array and set the key
                 // just set the character as usual.
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 characterindex++;
                 break;
             }
 
             // If the previous character was a special character, we're not dealing with a multichar word,
             // if we got a special character incoming, characterindex = 0 and deal with it!
-            if (codetobeparsed[iterator+1] == '('
-                || codetobeparsed[iterator+1] == ')'
-                || codetobeparsed[iterator+1] == '{'
-                || codetobeparsed[iterator+1] == '}'
-                || codetobeparsed[iterator+1] == '['
-                || codetobeparsed[iterator+1] == ']'
-                || codetobeparsed[iterator+1] == ';'
-                || codetobeparsed[iterator+1] == ','
-                || codetobeparsed[iterator+1] == '\n'
-                || codetobeparsed[iterator+1] == '\t'
-                || codetobeparsed[iterator+1] == ' ')
+            if (codetobelexed[iterator+1] == '('
+                || codetobelexed[iterator+1] == ')'
+                || codetobelexed[iterator+1] == '{'
+                || codetobelexed[iterator+1] == '}'
+                || codetobelexed[iterator+1] == '['
+                || codetobelexed[iterator+1] == ']'
+                || codetobelexed[iterator+1] == ';'
+                || codetobelexed[iterator+1] == ','
+                || codetobelexed[iterator+1] == '\n'
+                || codetobelexed[iterator+1] == '\t'
+                || codetobelexed[iterator+1] == ' ')
             {
 
                 characterindex = 0;
                 // wordindex++;
-                // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                // charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 // If the current character is space or special character AND the next one is space one also.
-                switch (codetobeparsed[iterator]) {
+                switch (codetobelexed[iterator]) {
                     case '(':
                         wordindex++;
                         break;
@@ -147,7 +145,15 @@ pools::charpool parsestring(std::string codetobeparsed) {
                         wordindex++;
                         break;
                     case '\n':
-                        wordindex++;
+                        switch (codetobelexed[iterator]) {
+                            case '\n':
+                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                                wordindex++;
+                                break;
+                            default:
+                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                                wordindex++;
+                        }
                         break;
                     case '\t':
                         wordindex++;
@@ -168,9 +174,9 @@ pools::charpool parsestring(std::string codetobeparsed) {
     return charPool;
 }
 
-pools::keywordpool lexobject(pools::charpool parsedobject) {
+pools::keywordpool parse(pools::charpool parsedobject) {
 
-    // Lexer: categorize keywords and define them as types, identifiers, names, operators, values and special symbols.
+    // Parser
 
     // Create object for variable pool
     pools::keywordpool keywordPool;
@@ -219,7 +225,7 @@ pools::keywordpool lexobject(pools::charpool parsedobject) {
     return keywordPool;
 }
 
-pools::compiledobject compile(pools::keywordpool lexedobject) {
+pools::compiledobject compile(pools::keywordpool parsedobject) {
 
     // Count the number of arrays/words in struct
     int wordindex = 0;   // Create variable for iterating through wordindexes
@@ -229,20 +235,20 @@ pools::compiledobject compile(pools::keywordpool lexedobject) {
 
     // For as long as keywordpool[wordindex][0] != dk_ntchar
     // check if data types found and convert them
-    for (int iterator = 0; lexedobject.keywordpool[iterator][0] != "\0"; iterator++) {
+    for (int iterator = 0; parsedobject.keywordpool[iterator][0] != "\0"; iterator++) {
 
-        if (lexedobject.keywordpool[iterator][0] == "integer") {
-            lexedobject.keywordpool[iterator][0] = "int";
+        if (parsedobject.keywordpool[iterator][0] == "integer") {
+            parsedobject.keywordpool[iterator][0] = "int";
         }
 
-        if (lexedobject.keywordpool[iterator][0] == "decimal") {
-            lexedobject.keywordpool[iterator][0] = "float";
+        if (parsedobject.keywordpool[iterator][0] == "decimal") {
+            parsedobject.keywordpool[iterator][0] = "float";
         }
     }
 
     // combine the keywords into an compiledpool array
-    for (int iterator = 0; lexedobject.keywordpool[iterator][0] != "\0"; iterator++) {
-        compiledobj.compiledstring[0][0] += lexedobject.keywordpool[iterator][0];
+    for (int iterator = 0; parsedobject.keywordpool[iterator][0] != "\0"; iterator++) {
+        compiledobj.compiledstring[0][0] += parsedobject.keywordpool[iterator][0];
     }
 
     // Return the compiled object
@@ -285,16 +291,16 @@ int main(int argc, char* argv[]) {
     // std::cout << linearray[0] << std::endl;
 
     // Pass the source to the parsestring function and return parsed object
-    pools::charpool parsedobject = parsestring(linearray[0]);
+    pools::charpool lexedobject = lex(linearray[0]);
 
     // Pass the parsed object
-    pools::keywordpool lexedobject = lexobject(parsedobject);
+    pools::keywordpool parsedobject = parse(lexedobject);
 
     // Print compiling
     std::cout << "Compiling..." << std::endl;
 
     // Compiler
-    pools::compiledobject compiledobj = compile(lexedobject);
+    pools::compiledobject compiledobj = compile(parsedobject);
 
     // Create file
     std::ofstream cppfile("compiledcode.cpp");
