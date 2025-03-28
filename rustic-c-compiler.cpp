@@ -85,6 +85,7 @@ pools::charpool lex(std::string codetobelexed) {
                 break;
             case '\t':
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                wordindex++;
                 characterindex = 0;
                 break;
             case ' ':
@@ -151,12 +152,18 @@ pools::charpool lex(std::string codetobelexed) {
                                 wordindex++;
                                 break;
                             default:
-                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                                 wordindex++;
                         }
                         break;
                     case '\t':
-                        wordindex++;
+                        switch (codetobelexed[iterator]) {
+                            case '\t':
+                                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                                wordindex++;
+                                break;
+                            default:
+                                wordindex++;
+                        }
                         break;
                     case ' ':
                         // wordindex++;
@@ -174,7 +181,7 @@ pools::charpool lex(std::string codetobelexed) {
     return charPool;
 }
 
-pools::keywordpool parse(pools::charpool parsedobject) {
+pools::keywordpool parse(pools::charpool lexedobject) {
 
     // Parser
 
@@ -192,7 +199,7 @@ pools::keywordpool parse(pools::charpool parsedobject) {
 
     // Count all words in charpool
     // For as long as charpool[iterator][0] != "\0", wordcounter++ and iterator++;
-    for (int iterator = 0; parsedobject.charpool[iterator][0] != "\0"; iterator++) {
+    for (int iterator = 0; lexedobject.charpool[iterator][0] != "\0"; iterator++) {
         wordcounter++;
     }
 
@@ -202,8 +209,8 @@ pools::keywordpool parse(pools::charpool parsedobject) {
 
         // Count the length of every word with characterindex, until ntchar2 found...
         // and set the keys, this sets the integer key perfectly, next we need to check for space...
-        for (worditerator = 0; parsedobject.charpool[wordindex][worditerator] != "\0"; worditerator++) {
-            keywordPool.keywordpool[wordindex][0] += parsedobject.charpool[wordindex][characterindex];
+        for (worditerator = 0; lexedobject.charpool[wordindex][worditerator] != "\0"; worditerator++) {
+            keywordPool.keywordpool[wordindex][0] += lexedobject.charpool[wordindex][characterindex];
             characterindex++;
         }
 
@@ -212,7 +219,7 @@ pools::keywordpool parse(pools::charpool parsedobject) {
         characterindex = 0;
 
         // If we get a space, wordindex++ and reset characterindex and go for the next word
-        if (parsedobject.charpool[wordindex][characterindex] == " ") {
+        if (lexedobject.charpool[wordindex][characterindex] == " ") {
             // Here we can decide if we want to include spaces or not
             keywordPool.keywordpool[wordindex][0] = " "; // Comment out this line to not include spaces
             // Increment wordindex, for getting the next word since space is only 1-letter.
