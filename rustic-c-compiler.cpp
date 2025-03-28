@@ -27,7 +27,9 @@ union pools {
 
 pools::charpool lex(std::string codetobelexed) {
 
-    // Lexer
+    // Sorry bisqwit we did the switcharoo, and now the parser is a lexer :D Im a bit sorry
+
+    // The conversion of a stream of characters to a stream of meaningful tokens
 
     // Create object for accessing pools
     pools::charpool charPool;
@@ -185,6 +187,8 @@ pools::keywordpool parse(pools::charpool lexedobject) {
 
     // Parser
 
+    // A computer program that breaks down text into recognized strings of characters for further analysis
+
     // Create object for variable pool
     pools::keywordpool keywordPool;
 
@@ -203,7 +207,7 @@ pools::keywordpool parse(pools::charpool lexedobject) {
         wordcounter++;
     }
 
-    // For all words in wordlist; do for loop with clause (parsedobject.charpool[wordindex][worditerator] != "\0")
+    // For all words in wordlist; do for loop with clause (lexedobject.charpool[wordindex][worditerator] != "\0")
     // and set the keys, as normal. then, when we get "\0"
     for (iterator = 0; iterator <= wordcounter; iterator++) {
 
@@ -294,7 +298,6 @@ int main(int argc, char* argv[]) {
             linearray[0] += rusticcline + "\n";
         }
     }
-
     // std::cout << linearray[0] << std::endl;
 
     // Pass the source to the parsestring function and return parsed object
@@ -303,17 +306,14 @@ int main(int argc, char* argv[]) {
     // Pass the parsed object
     pools::keywordpool parsedobject = parse(lexedobject);
 
-    // Print compiling
-    std::cout << "Compiling..." << std::endl;
-
     // Compiler
     pools::compiledobject compiledobj = compile(parsedobject);
 
     // Create file
-    std::ofstream cppfile("compiledcode.cpp");
+    std::ofstream cppfile("defaultoutput.cpp");
 
     // Print writing to file
-    std::cout << "Writing to compiledcode.cpp..." << std::endl;
+    std::cout << "Writing to: defaultoutput.cpp..." << std::endl;
 
     // Write to file
     cppfile << compiledobj.compiledstring[0][0];
