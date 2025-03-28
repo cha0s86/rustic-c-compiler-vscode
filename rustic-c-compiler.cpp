@@ -44,7 +44,7 @@ pools::charpool parsestring(std::string codetobeparsed) {
     {
         // Check for space bar, if we get space bar, store it in charpool.
 
-        if (codetobeparsed[iterator] != '\0')
+        if (codetobeparsed[iterator] != '\n')
         {
             // If we get semicolon, store it in charpool.
             switch (codetobeparsed[iterator]) {
@@ -73,7 +73,6 @@ pools::charpool parsestring(std::string codetobeparsed) {
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case ';':
-                // wordindex++;
                 characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
@@ -82,7 +81,6 @@ pools::charpool parsestring(std::string codetobeparsed) {
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 break;
             case '\n':
-                // wordindex++;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
                 characterindex = 0;
                 break;
@@ -91,15 +89,20 @@ pools::charpool parsestring(std::string codetobeparsed) {
                 characterindex = 0;
                 break;
             case ' ':
-                characterindex = 0;
                 charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                wordindex++;
+                characterindex = 0;
                 break;
             default:
-                // If the previous checks did not complete, go to the next character in the array and set the key
-                // just set the character as usual.
-                charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
-                characterindex++;
+                // If the next character is a special character do nothing,
+                // but if it's other than a space set the key and characterindex++
+                if (codetobeparsed[iterator+1] == ' ') {
+                    //charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    //wordindex++;
+                    characterindex++;
+                } else {
+                    charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    characterindex++;
+                }
                 break;
             }
 
@@ -117,7 +120,6 @@ pools::charpool parsestring(std::string codetobeparsed) {
                 || codetobeparsed[iterator+1] == '\t'
                 || codetobeparsed[iterator+1] == ' ')
             {
-
                 characterindex = 0;
                 // wordindex++;
                 // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
@@ -154,18 +156,81 @@ pools::charpool parsestring(std::string codetobeparsed) {
                         wordindex++;
                         break;
                     case ' ':
-                        // wordindex++;
+                        wordindex++;
                         break;
                     default:
                         wordindex++;
                         break;
                 }
-                // Check if we have multiple spaces
+                if (codetobeparsed[iterator+1] == '('
+                    || codetobeparsed[iterator+1] == ')'
+                    ||  codetobeparsed[iterator+1] == '{'
+                    ||  codetobeparsed[iterator+1] == '}'
+                    ||  codetobeparsed[iterator+1] == '['
+                    ||  codetobeparsed[iterator+1] == ']'
+                    ||  codetobeparsed[iterator+1] == ';'
+                    ||  codetobeparsed[iterator+1] == ','
+                    ||  codetobeparsed[iterator+1] == '\n'
+                    ||  codetobeparsed[iterator+1] == '\t'
+                    ||  codetobeparsed[iterator+1] == ' ')
+                {
+                    //wordindex++;
+                    characterindex = 0;
+                    // charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                    // If the current character is space or special character AND the next one is space one also.
+                    switch (codetobeparsed[iterator]) {
+                        case '(':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case ')':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case '{':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case '}':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case '[':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case ']':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case ';':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case ',':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case '\n':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case '\t':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        case ' ':
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            wordindex++;
+                            break;
+                        default:
+                            charPool.charpool[wordindex][characterindex] = codetobeparsed[iterator];
+                            break;
+                    }
+                }
             }
         }
-
     }
-
     return charPool;
 }
 
