@@ -236,23 +236,27 @@ int main(int argc, char* argv[]) {
 
     if (argc == 1) {
         std::cout << "Error: No arguments passed." << std::endl;
-        return 0;
+        return 1;
     }
     else if (argc == 2) {
-        std::cout << "Passed in: " << argv[1] << std::endl;
+        std::cout << "Compiling: " << argv[1] << std::endl;
         filename = argv[1];
     }
     else if (argc == 3) {
-        std::cout << "Source code passed: " << argv[1] << std::endl;
-        std::cout << "Option passed: " << argv[2] << std::endl;
+        std::cout << "Something went wrong: see help with ";
+        return 1;
     }
     else if (argc == 4) {
          // Parse the arguments and print error, if only 3 given
-         filename = argv[1];
-         outputfilename = argv[3];
-         std::cout << "Source code passed: " << argv[1] << std::endl;
-         std::cout << "Option passed: " << argv[2] << std::endl;
-         std::cout << "Ouput file: " << argv[3] << std::endl;
+         if (strcmp(argv[2], "-o") == 0) {
+            filename = argv[1];
+            outputfilename = argv[3];
+            std::cout << "Compiling: " << argv[1] << std::endl;
+         } else {
+            std::cout << "Something went wrong: the syntax is \"source\", \"option\" and \"output\"...";
+            return 1;
+         }
+
     }
 
     //filename = "rusticc.rc";
@@ -291,9 +295,6 @@ int main(int argc, char* argv[]) {
     // Pass the parsed object
     pools::keywordpool lexedobject = lexobject(parsedobject);
 
-    // Print compiling
-    std::cout << "Compiling..." << std::endl;
-
     // Compiler
     pools::compiledobject compiledobj = compile(lexedobject);
 
@@ -315,4 +316,3 @@ int main(int argc, char* argv[]) {
     // return the exit code and exit program 
     return 0;
 }
-
