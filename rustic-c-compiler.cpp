@@ -241,9 +241,10 @@ int main(int argc, char* argv[]) {
     else if (argc == 2) {
         std::cout << "Compiling: " << argv[1] << std::endl;
         filename = argv[1];
+        outputfilename = "defaultoutput.cpp";
     }
     else if (argc == 3) {
-        std::cout << "Something went wrong: see help with ";
+        std::cout << "Something went wrong: see help with -h option";
         return 1;
     }
     else if (argc == 4) {
