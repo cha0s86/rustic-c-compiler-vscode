@@ -5,7 +5,7 @@
 using namespace std;
 
 // パソコンいいこと！
-// Can someone share this code to bisqwit for him to read?
+// Can someone help me with this code?
 
 union pools {
 
