@@ -18,5 +18,3 @@ union pools {
             std::string compiledstring[128][64];
     };
 };
-
-void setChars(std::string codetobelexed, int iterator, int wordindex, int characterindex, pools::charpool charpool);

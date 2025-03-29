@@ -8,9 +8,7 @@ using namespace std;
 // パソコンいいこと！
 // Can someone help me with this code?
 
-pools::charpool lex(std::string codetobelexed) {
-
-    // The conversion of a stream of characters to a stream of meaningful tokens
+pools::charpool lexer(std::string codetobelexed) {
 
     // Create object for accessing pools
     pools::charpool charpool;
@@ -80,8 +78,6 @@ pools::charpool lex(std::string codetobelexed) {
 }
 
 pools::keywordpool parse(pools::charpool lexedobject) {
-
-    // A computer program that breaks down text into recognized strings of characters for further analysis.
 
     // Create object for variable pool
     pools::keywordpool keywordPool;
