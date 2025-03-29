@@ -26,8 +26,11 @@ pools::charpool lex(std::string codetobelexed) {
     {
         // Check for space bar, if we get space bar, store it in charpool.
         if (codetobelexed[iterator] == ' '
+            || codetobelexed[iterator] == '#'
             || codetobelexed[iterator] == '('
             || codetobelexed[iterator] == ')'
+            || codetobelexed[iterator] == '<'
+            || codetobelexed[iterator] == '>'
             || codetobelexed[iterator] == '{'
             || codetobelexed[iterator] == '}'
             || codetobelexed[iterator] == '['
@@ -41,10 +44,9 @@ pools::charpool lex(std::string codetobelexed) {
                 charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
                 characterindex = 0;
                 if (codetobelexed[iterator+1] == codetobelexed[iterator]) {
-                    for (int characteriterator = 0; codetobelexed[characteriterator] != '\n'; characteriterator++) {
-                        charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                    for (int characteriterator = 0; codetobelexed[characteriterator] == codetobelexed[iterator+1]; characteriterator++) {
+                        charpool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
                     }
-                    wordindex++;
                 }
                 wordindex++;
                 characterindex = 0;
@@ -52,13 +54,16 @@ pools::charpool lex(std::string codetobelexed) {
             else 
             {   
                 charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                if (codetobelexed[iterator+1] == ' ' 
+                if (codetobelexed[iterator+1] == ' '
+                    || codetobelexed[iterator+1] == '#'
                     || codetobelexed[iterator+1] == '('
                     || codetobelexed[iterator+1] == ')'
+                    || codetobelexed[iterator+1] == '<'
+                    || codetobelexed[iterator+1] == '>'
                     || codetobelexed[iterator+1] == '{'
                     || codetobelexed[iterator+1] == '}'
-                    || codetobelexed[iterator+1] == '['
-                    || codetobelexed[iterator+1] == ']'
+                    || codetobelexed[iterator+1] == '('
+                    || codetobelexed[iterator+1] == ')'
                     || codetobelexed[iterator+1] == ';'
                     || codetobelexed[iterator+1] == ','
                     || codetobelexed[iterator+1] == '\n'
