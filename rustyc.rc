@@ -3,6 +3,11 @@ using namespace std;
 
 integer main() {
 	
-	decimal a = 0;
+	integer int1 = 2;
+	integer int2 = 2;
+
+	decimal decimal1 = 0;
+	decimal decimal1 = 0;
+
 	return 0;
 }

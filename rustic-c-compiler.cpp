@@ -9,8 +9,11 @@ using namespace std;
 // The rustic c language is just like c/c++ with minor changes:
 // int -> integer and float -> decimal
 // just write like normal and pass the .rc file to the program
+// Rustic C kieli on kuin C/C++ kieli mutta pienillä muutoksilla:
+// int avainsana on -> integer ja float -> decimal.
+// Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle :D
 
-pools::charpool lexer(std::string codetobelexed) {
+pools::charpool lex(std::string codetobelexed) {
 
     // Create object for accessing pools
     pools::charpool charpool;
