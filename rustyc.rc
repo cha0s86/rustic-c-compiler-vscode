@@ -1,8 +1,0 @@
-#include <iostream>
-using namespace std;
-
-integer main() {
-	
-	decimal a = 0;
-	return 0;
-}
