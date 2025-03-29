@@ -164,10 +164,11 @@ pools::compiledobject compile(pools::keywordpool parsedobject) {
 int main(int argc, char* argv[]) {
 
     std::string filename;
+    std::string outputfilename;
 
     std::cout << "Code .rc files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
     std::cout << "Enter .rc file filename: ";
-    cin >> filename;
+    std::cin >> filename;
 
     std::fstream rusticcfile(filename);
 
@@ -194,6 +195,7 @@ int main(int argc, char* argv[]) {
             linearray += rusticcline + "\n";
         }
     }
+
     // std::cout << linearray[0] << std::endl;
 
     // Pass the source to the parsestring function and return parsed object
@@ -202,14 +204,33 @@ int main(int argc, char* argv[]) {
     // Pass the parsed object
     pools::keywordpool parsedobject = parse(lexedobject);
 
-    // Compiler
+    // Compile
     pools::compiledobject compiledobj = compile(parsedobject);
 
-    // Create file
-    std::ofstream cppfile("defaultoutput.cpp");
+    // User input
+    std::cout << "Give the output file a name: ";
+    std::cin >> outputfilename;
 
-    // Print writing to file
-    std::cout << "Writing to: defaultoutput.cpp..." << std::endl;
+    // Create file
+    std::ofstream cppfile(outputfilename);
+
+    // Create variable for test
+    std::string answer;
+
+    // Check if user wants to build an executable
+    std::cout << "Do you want to build an executable with g++? - make sure you have it installed!" << std::endl;
+    std::cout << "(yes/no): ";
+    std::cin >> answer;
+
+    if (answer == "yes") {
+    std::string cmd = "g++ -o output.exe " + filename;
+    system(cmd.c_str());
+    } else if (answer == "no") {
+        std::cout << "Ok. Compiling to your file...";
+    } else {
+
+        std::cout << "Something went wrong... the options are yes / no..." << std::endl;
+    }
 
     // Write to file
     cppfile << compiledobj.compiledstring[0][0];
