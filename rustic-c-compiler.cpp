@@ -6,7 +6,9 @@
 using namespace std;
 
 // パソコンいいこと！
-// Can someone help me with this code?
+// The rustic c language is just like c/c++ with minor changes:
+// int -> integer and float -> decimal
+// just write like normal and pass the .rc file to the program
 
 pools::charpool lexer(std::string codetobelexed) {
 
