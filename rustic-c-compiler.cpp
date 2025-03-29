@@ -269,7 +269,7 @@ int main(int argc, char* argv[]) {
 
     if (argc == 1) {
         std::cout << "Error: No arguments passed." << std::endl;
-        return 1;
+        return -1;
     }
     else if (argc == 2) {
         std::cout << "Compiling: " << argv[1] << std::endl;
@@ -277,8 +277,14 @@ int main(int argc, char* argv[]) {
         outputfilename = "defaultoutput.cpp";
     }
     else if (argc == 3) {
-        std::cout << "Something went wrong: see help with -h option";
-        return 1;
+        if (strcmp(argv[2], "-o") == 0) {
+            std::cout << "Too few arguments passed..." << std::endl;
+            std::cout << "The syntax is: thiscompiler.exe <source> -o <output>..." << std::endl;
+            return -1;
+        } else {
+            std::cout << "The syntax is: thiscompiler.exe <source> -o <output>..." << std::endl;
+            return -1;
+         }
     }
     else if (argc == 4) {
          // Parse the arguments and print error, if only 3 given
@@ -287,7 +293,7 @@ int main(int argc, char* argv[]) {
             outputfilename = argv[3];
             std::cout << "Compiling: " << argv[1] << std::endl;
          } else {
-            std::cout << "Something went wrong: the syntax is \"source\", \"option\" and \"output\"...";
+            std::cout << "The syntax is: thiscompiler.exe <source> -o <output>..." << std::endl;
             return 1;
          }
 
