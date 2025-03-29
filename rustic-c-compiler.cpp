@@ -26,6 +26,7 @@ union pools {
 };
 
 void setChars(std::string codetobelexed, int iterator, int wordindex, int characterindex, pools::charpool charPool) {
+
     characterindex = 0;
     charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
     characterindex = 0;
@@ -205,7 +206,7 @@ int main(int argc, char* argv[]) {
 
     // Read file
     std::string rusticcline;
-    std::string linearray[128];
+    std::string linearray;
 
     int linecount = 0;
 
@@ -219,17 +220,17 @@ int main(int argc, char* argv[]) {
     for (int iterator = 0; iterator <= linecount; iterator++) {
         if (iterator == linecount-1) {
             getline(rusticcfile, rusticcline);
-            linearray[0] += rusticcline;
+            linearray += rusticcline;
         }
         else if (iterator < linecount) {
             getline(rusticcfile, rusticcline);
-            linearray[0] += rusticcline + "\n";
+            linearray += rusticcline + "\n";
         }
     }
     // std::cout << linearray[0] << std::endl;
 
     // Pass the source to the parsestring function and return parsed object
-    pools::charpool lexedobject = lex(linearray[0]);
+    pools::charpool lexedobject = lex(linearray);
 
     // Pass the parsed object
     pools::keywordpool parsedobject = parse(lexedobject);
