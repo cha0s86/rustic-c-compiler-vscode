@@ -6,6 +6,8 @@ integer main() {
 	integer int1 = 2;
 	integer int2 = 2;
 
+    double xdtranslatethis;
+
 	decimal decimal1 = 0;
 	decimal decimal1 = 0;
 
