@@ -165,8 +165,8 @@ int main(int argc, char* argv[]) {
 
     std::string filename;
 
-    std::cout << "Create a .rc file and code it like c/c++ and use variable types like integer and decimal!" << std::endl;
-    std::cout << "Enter .rc source code filename: ";
+    std::cout << "Code .rc files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
+    std::cout << "Enter .rc file filename: ";
     cin >> filename;
 
     std::fstream rusticcfile(filename);
