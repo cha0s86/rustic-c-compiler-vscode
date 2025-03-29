@@ -1,7 +1,6 @@
 {
     "files.associations": {
         "*.cpp": "cpp",
-        "system_error": "cpp",
         "xstring": "cpp",
         "atomic": "cpp",
         "bit": "cpp",
@@ -35,10 +34,12 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "string": "cpp",
+        "system_error": "cpp",
         "tuple": "cpp",
         "type_traits": "cpp",
         "typeinfo": "cpp",
         "utility": "cpp",
+        "vector": "cpp",
         "xfacet": "cpp",
         "xiosbase": "cpp",
         "xlocale": "cpp",
@@ -50,9 +51,6 @@
         "xloctime": "cpp",
         "xmemory": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp",
-        "*.rc": "cpp",
-        "vector": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "enabled"
+        "xutility": "cpp"
+    }
 }

@@ -25,9 +25,18 @@ union pools {
     };
 };
 
-pools::charpool lex(std::string codetobelexed) {
+void setChars(std::string codetobelexed, int iterator, int wordindex, int characterindex, pools::charpool charPool) {
+    characterindex = 0;
+    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+    characterindex = 0;
+    if (codetobelexed[iterator+1] == codetobelexed[iterator]) {
+        for (int characteriterator = 0; charPool.charpool[wordindex][characteriterator] == codetobelexed[iterator]; characteriterator++) {
 
-    // Sorry bisqwit we did the switcharoo, and now the parser is a lexer :D Im a bit sorry
+        }
+    }
+}
+
+pools::charpool lex(std::string codetobelexed) {
 
     // The conversion of a stream of characters to a stream of meaningful tokens
 
@@ -41,151 +50,72 @@ pools::charpool lex(std::string codetobelexed) {
     // Create parser for dividing string into keywords and storing them in an array.
 
     // While codetobelexed[iterator] doesn't equal nullterminate character ('\0')
-    for (iterator = 0; codetobelexed[iterator] != '\0'; iterator++)
-    {
+    for (iterator = 0; codetobelexed[iterator] != '\0'; iterator++) {
         // Check for space bar, if we get space bar, store it in charpool.
-
-        if (codetobelexed[iterator] != '\0')
-        {
-            // If we get semicolon, store it in charpool.
-            switch (codetobelexed[iterator]) {
+        switch (codetobelexed[iterator]) {
+            case ' ':
+            setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
+                break;
             case '(':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case ')':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case '{':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case '}':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case '[':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case ']':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case ';':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case ',':
-                characterindex = 0;
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case '\n':
-            for (iterator; codetobelexed[iterator+1] == '\n'; iterator++) {
-                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
-                    wordindex++;
-                }
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                characterindex = 0;
-                wordindex++;
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             case '\t':
-                for (iterator; codetobelexed[iterator+1] == '\t'; iterator++) {
-                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
-                    wordindex++;
-                }
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                characterindex = 0;
-                wordindex++;
-                break;
-            case ' ':
-                for (iterator; codetobelexed[iterator+1] == ' '; iterator++) {
-                    charPool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
-                    wordindex++;
-                }
-                charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                characterindex = 0;
-                wordindex++;
+                setChars(codetobelexed, iterator, wordindex, characterindex, charPool);
                 break;
             default:
-                // If the previous checks did not complete, go to the next character in the array and set the key
-                // just set the character as usual.
+                // If the previous checks did not complete
+                // it's probably a character, just set the character as usual.
                 charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                characterindex++;
-                break;
-            }
-
-            // If the previous character was a special character, we're not dealing with a multichar word,
-            // if we got a special character incoming, characterindex = 0 and deal with it!
-            if (codetobelexed[iterator+1] == '('
-                || codetobelexed[iterator+1] == ')'
-                || codetobelexed[iterator+1] == '{'
-                || codetobelexed[iterator+1] == '}'
-                || codetobelexed[iterator+1] == '['
-                || codetobelexed[iterator+1] == ']'
-                || codetobelexed[iterator+1] == ';'
-                || codetobelexed[iterator+1] == ','
-                || codetobelexed[iterator+1] == '\n'
-                || codetobelexed[iterator+1] == '\t'
-                || codetobelexed[iterator+1] == ' ')
-            {
-                characterindex = 0;
-                // wordindex++;
-                // charPool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                // If the current character is space or special character AND the next one is space one also.
-                switch (codetobelexed[iterator]) {
-                    case '(':
+                if (codetobelexed[iterator+1] == ' ' 
+                    || codetobelexed[iterator+1] == '('
+                    || codetobelexed[iterator+1] == ')'
+                    || codetobelexed[iterator+1] == '{'
+                    || codetobelexed[iterator+1] == '}'
+                    || codetobelexed[iterator+1] == '['
+                    || codetobelexed[iterator+1] == ']'
+                    || codetobelexed[iterator+1] == '\n'
+                    || codetobelexed[iterator+1] == '('
+                    || codetobelexed[iterator+1] == '('
+                    || codetobelexed[iterator+1] == '(') {
                         wordindex++;
-                        break;
-                    case ')':
-                        wordindex++;
-                        break;
-                    case '{':
-                        wordindex++;
-                        break;
-                    case '}':
-                        wordindex++;
-                        break;
-                    case '[':
-                        wordindex++;
-                        break;
-                    case ']':
-                        wordindex++;
-                        break;
-                    case ';':
-                        wordindex++;
-                        break;
-                    case ',':
-                        wordindex++;
-                        break;
-                    case '\n':
-                        // wordindex++;
-                        break;
-                    case '\t':
-                        // wordindex++;
-                        break;
-                    case ' ':
-                        // wordindex++;
-                        break;
-                    default:
-                        wordindex++;
-                        break;
+                } else {
+                    characterindex++;
                 }
-                // Check if we have multiple spaces
-            }
+                break;
         }
-
     }
-
     return charPool;
 }
 
+
+
 pools::keywordpool parse(pools::charpool lexedobject) {
 
-    // Parser
-
-    // A computer program that breaks down text into recognized strings of characters for further analysis
+    // A computer program that breaks down text into recognized strings of characters for further analysis.
 
     // Create object for variable pool
     pools::keywordpool keywordPool;
