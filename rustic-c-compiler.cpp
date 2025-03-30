@@ -76,8 +76,7 @@ pools::charpool lex(std::string codetobelexed) {
                     || codetobelexed[iterator+1] == '\n'
                     || codetobelexed[iterator+1] == '\t') {
                         wordindex++;
-                }
-                else 
+                } else 
                 {
                     characterindex++;
                 }
@@ -216,7 +215,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Enter output (.cpp) filename: ";
     std::cin >> outputfilename;
 
-    std::string outputfile = "build/" + outputfilename;
+    std::string outputfile = outputfilename;
 
     // Create file
     std::ofstream cppfile(outputfile);
@@ -241,7 +240,7 @@ int main(int argc, char* argv[]) {
     if (answer == "yes") {
         std::cout << "Give your executable a name: ";
         std::cin >> executable;
-        std::string cmdline = "g++ -o build/" + executable + " " + outputfile;
+        std::string cmdline = "g++ -o " + executable + " " + outputfile;
         system(cmdline.c_str());
     } else if (answer == "no") {
         std::cout << "" << std::endl;
