@@ -1,7 +1,6 @@
 {
     "files.associations": {
         "*.cpp": "cpp",
-        "xstring": "cpp",
         "atomic": "cpp",
         "bit": "cpp",
         "cctype": "cpp",
@@ -50,6 +49,7 @@
         "xlocnum": "cpp",
         "xloctime": "cpp",
         "xmemory": "cpp",
+        "xstring": "cpp",
         "xtr1common": "cpp",
         "xutility": "cpp"
     }

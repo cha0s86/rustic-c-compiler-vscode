@@ -13,7 +13,9 @@ using namespace std;
 // just write like normal and pass the .rc file to the program
 // Rustic C kieli on kuin C/C++ kieli mutta pienillä muutoksilla:
 // int avainsana on -> integer ja float -> decimal.
-// Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle :D
+// Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle
+// Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa.
+// Valitse lopuksi haluatko, että ulostulo käännetään exe tiedostoksi
 
 pools::charpool lex(std::string codetobelexed) {
 
@@ -208,17 +210,19 @@ int main(int argc, char* argv[]) {
     // Compile
     pools::compiledobject compiledobj = compile(parsedobject);
 
-    std::string output;
+    std::string outputfilename;
 
     // User input
     std::cout << "Enter output (.cpp) filename: ";
-    std::cin >> output;
+    std::cin >> outputfilename;
+
+    std::string outputfile = "build/" + outputfilename;
 
     // Create file
-    std::ofstream cppfile(output);
+    std::ofstream cppfile(outputfile);
 
     // Writing to file
-    std::cout << "Writing to file: " << output << std::endl;
+    std::cout << "Writing to file: " << outputfile << std::endl;
     cppfile << compiledobj.compiledstring[0][0];
 
     // Close the file
@@ -237,7 +241,7 @@ int main(int argc, char* argv[]) {
     if (answer == "yes") {
         std::cout << "Give your executable a name: ";
         std::cin >> executable;
-        std::string cmdline = "g++ -o " + executable + " " + output;
+        std::string cmdline = "g++ -o build/" + executable + " " + outputfile;
         system(cmdline.c_str());
     } else if (answer == "no") {
         std::cout << "" << std::endl;
