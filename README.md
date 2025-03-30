@@ -6,3 +6,6 @@ Just write rc code that's it!
 
 To build rustic-c-compiler.cpp:
 use g++ like so: g++ -o rustic-c-compiler.exe rustic-compiler.cpp
+
+If you don't have g++, install MSYS2 and use ´pacman -S mingw-w64-x86_64-gcc´ at the MINGW64 environment.
+That's it!
