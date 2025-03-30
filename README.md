@@ -3,3 +3,6 @@ The changes are int -> integer and float -> decimal, atleast for now.
 Parser probably has errors, if i encounter problems i will try to solve them.
 You can create .rc files and write "rc code", with keywords integer and decimal
 Just write rc code that's it!
+
+To build rustic-c-compiler.cpp:
+use g++ like so: g++ -o rustic-c-compiler.exe rustic-compiler.cpp
