@@ -214,29 +214,34 @@ int main(int argc, char* argv[]) {
     // Create file
     std::ofstream cppfile(outputfilename);
 
-    // Create variable for test
-    std::string answer;
-
-    // Check if user wants to build an executable
-    std::cout << "Do you want to build an executable with g++? - make sure you have it installed!" << std::endl;
-    std::cout << "(yes/no): ";
-    std::cin >> answer;
-
-    if (answer == "yes") {
-    std::string cmd = "g++ -o output.exe " + filename;
-    system(cmd.c_str());
-    } else if (answer == "no") {
-        std::cout << "Ok. Compiling to your file...";
-    } else {
-
-        std::cout << "Something went wrong... the options are yes / no..." << std::endl;
-    }
-
-    // Write to file
+    // Writing to file
+    std::cout << "Writing to file: " << outputfilename << std::endl;
     cppfile << compiledobj.compiledstring[0][0];
 
     // Close the file
     cppfile.close();
+
+    // Create variable for test
+    std::string answer;
+
+    // Check if user wants to build an executable
+    std::cout << "Do you want to build an executable with g++? Make sure you have it installed!" << std::endl;
+    std::cout << "(yes/no): ";
+    std::cin >> answer;
+
+    if (answer == "yes") {
+    std::string cmd = "g++ -o output.exe " + outputfilename;
+
+    system(cmd.c_str());
+    } else if (answer == "no") {
+        std::cout << "" << std::endl;
+    } else {
+
+        std::cout << "Error: the options are yes and no." << std::endl;
+    }
+
+    // Write to file
+
 
     // Pause
     system("pause");
