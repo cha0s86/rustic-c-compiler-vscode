@@ -7,7 +7,7 @@
 #include "rustic-c-compiler.h"
 using namespace std;
 
-// パソコンいいこと！
+// パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
 // The rustic c language is just like c/c++ with minor changes:
 // int -> integer and float -> decimal
 // just write like normal and pass the .rc file to the program
