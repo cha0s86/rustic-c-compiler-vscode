@@ -208,17 +208,17 @@ int main(int argc, char* argv[]) {
     // Compile
     pools::compiledobject compiledobj = compile(parsedobject);
 
-    std::string outputfilename;
+    std::string output;
 
     // User input
     std::cout << "Enter output (.cpp) filename: ";
-    std::cin >> outputfilename;
+    std::cin >> output;
 
     // Create file
-    std::ofstream cppfile(outputfilename);
+    std::ofstream cppfile(output);
 
     // Writing to file
-    std::cout << "Writing to file: " << outputfilename << std::endl;
+    std::cout << "Writing to file: " << output << std::endl;
     cppfile << compiledobj.compiledstring[0][0];
 
     // Close the file
@@ -226,30 +226,25 @@ int main(int argc, char* argv[]) {
 
     // Create variable for test
     std::string answer;
-    std::string binaryname;
+    std::string executable;
 
     // Check if user wants to build an executable
     std::cout << "Do you want to build an executable with g++? Make sure you have it installed!" << std::endl;
     std::cout << "(yes/no): ";
     std::cin >> answer;
 
-
-
-
+    // If user wants to create an executable, use g++
     if (answer == "yes") {
         std::cout << "Give your executable a name: ";
-        std::cin >> binaryname;
-        std::string cmd = "g++ -o " + binaryname + " " + outputfilename;
-        system(cmd.c_str());
+        std::cin >> executable;
+        std::string cmdline = "g++ -o " + executable + " " + output;
+        system(cmdline.c_str());
     } else if (answer == "no") {
         std::cout << "" << std::endl;
     } else {
 
         std::cout << "Error: the options are yes and no." << std::endl;
     }
-
-    // Write to file
-
 
     // Pause
     system("pause");
