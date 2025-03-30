@@ -210,12 +210,12 @@ int main(int argc, char* argv[]) {
 
     std::string outputfilename;
 
-    // Create file
-    std::ofstream cppfile(outputfilename);
-
     // User input
     std::cout << "Enter output (.cpp) filename: ";
     std::cin >> outputfilename;
+
+    // Create file
+    std::ofstream cppfile(outputfilename);
 
     // Writing to file
     std::cout << "Writing to file: " << outputfilename << std::endl;

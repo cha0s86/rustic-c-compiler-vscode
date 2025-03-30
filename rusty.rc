@@ -3,8 +3,8 @@ using namespace std;
 
 integer main() {
 	
-	integer int1 = 2;
-	decimal decimal1 = 0;
+	integer myint = 0;
+	decimal myfloat = 0;
 
 	return 0;
 }
