@@ -4,7 +4,7 @@ using namespace std;
 integer main() {
 	
 	integer myint = 0;
-	decimal myfloat = 0;
+	std::cout << myint << std::endl;
 
 	return 0;
 }
