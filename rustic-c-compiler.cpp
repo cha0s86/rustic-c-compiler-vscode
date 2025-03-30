@@ -1,4 +1,6 @@
+#ifdef __WINDOWS__ 
 #include <windows.h>
+#endif
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -164,10 +166,9 @@ pools::compiledobject compile(pools::keywordpool parsedobject) {
 int main(int argc, char* argv[]) {
 
     std::string filename;
-    std::string outputfilename;
 
     std::cout << "Code .rc files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
-    std::cout << "Enter .rc file filename: ";
+    std::cout << "Enter .rc source filename: ";
     std::cin >> filename;
 
     std::fstream rusticcfile(filename);
@@ -207,12 +208,14 @@ int main(int argc, char* argv[]) {
     // Compile
     pools::compiledobject compiledobj = compile(parsedobject);
 
-    // User input
-    std::cout << "Give the output file a name: ";
-    std::cin >> outputfilename;
+    std::string outputfilename;
 
     // Create file
     std::ofstream cppfile(outputfilename);
+
+    // User input
+    std::cout << "Enter output (.cpp) filename: ";
+    std::cin >> outputfilename;
 
     // Writing to file
     std::cout << "Writing to file: " << outputfilename << std::endl;
@@ -223,16 +226,21 @@ int main(int argc, char* argv[]) {
 
     // Create variable for test
     std::string answer;
+    std::string binaryname;
 
     // Check if user wants to build an executable
     std::cout << "Do you want to build an executable with g++? Make sure you have it installed!" << std::endl;
     std::cout << "(yes/no): ";
     std::cin >> answer;
 
-    if (answer == "yes") {
-    std::string cmd = "g++ -o output.exe " + outputfilename;
 
-    system(cmd.c_str());
+
+
+    if (answer == "yes") {
+        std::cout << "Give your executable a name: ";
+        std::cin >> binaryname;
+        std::string cmd = "g++ -o " + binaryname + " " + outputfilename;
+        system(cmd.c_str());
     } else if (answer == "no") {
         std::cout << "" << std::endl;
     } else {
