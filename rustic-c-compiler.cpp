@@ -8,14 +8,15 @@
 using namespace std;
 
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
+// random encount er was here duhhh
 // The rustic c language is just like c/c++ with minor changes:
 // int -> integer and float -> decimal
 // just write like normal and pass the .rc file to the program
 // Rustic C kieli on kuin C/C++ kieli mutta pienillä muutoksilla:
 // int avainsana on -> integer ja float -> decimal.
 // Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle
-// Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa.
-// Valitse lopuksi haluatko, että ulostulo käännetään exe tiedostoksi
+// Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa tai ilman.
+// Valitse lopuksi haluatko, että ulostulo kootaan exe tiedostoksi
 
 pools::charpool lex(std::string codetobelexed) {
 
@@ -153,6 +154,8 @@ pools::compiledobject compile(pools::keywordpool parsedobject) {
         if (parsedobject.keywordpool[iterator][0] == "decimal") {
             parsedobject.keywordpool[iterator][0] = "float";
         }
+        
+        
     }
 
     // combine the keywords into an compiledpool array
