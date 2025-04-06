@@ -182,7 +182,7 @@ int main(int argc, char* argv[]) {
 
     int linecount = 0;
 
-    while (getline(rustic-+cfile, rusticcline)) {
+    while (getline(rusticcfile, rusticcline)) {
         linecount++;
     }
 
