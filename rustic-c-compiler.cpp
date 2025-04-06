@@ -8,7 +8,6 @@
 using namespace std;
 
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
-// random encount er was here duhhh
 // The rustic c language is just like c/c++ with minor changes:
 // int -> integer and float -> decimal
 // just write like normal and pass the .rc file to the program
@@ -183,7 +182,7 @@ int main(int argc, char* argv[]) {
 
     int linecount = 0;
 
-    while (getline(rusticcfile, rusticcline)) {
+    while (getline(rustic-+cfile, rusticcline)) {
         linecount++;
     }
 

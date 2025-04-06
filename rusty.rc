@@ -2,12 +2,9 @@
 using namespace std;
 
 integer main() {
-	
-	integer myint  = 0;
-	decimal myfloat = 0;
-
-	std::cout << "My integer: " << myint << std::endl;
-	std::cout << "My decimal: " << myint << std::endl;
-
+	char c;
+	cout << "Enter a character: ";
+	cin >> c;
+	cout << "ASCII Value of " << c << " is " << integer(c);
 	return 0;
 }
