@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <string.h>
 #include "rustic-c-compiler.h"
 using namespace std;
 

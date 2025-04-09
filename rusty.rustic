@@ -1,6 +1,0 @@
-integer main() {
-
-    decimal b = 0;
-
-    return 0;
-}
