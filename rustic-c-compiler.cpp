@@ -169,16 +169,38 @@ pools::compiledobject compile(pools::keywordpool parsedobject) {
 int main(int argc, char* argv[]) {
 
     std::string filename;
+    std::string outputfilename;
 
-    std::cout << "Code .rc files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
-    std::cout << "Enter .rc source filename: ";
-    std::cin >> filename;
+    if (argc == 1) {
+        std::cout << "Code .rc files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
+        std::cout << "Enter .rc source filename: ";
+        std::cin >> filename;
+        outputfilename = "output.cpp";
+    }
+    else if (argc == 2) {
+        std::cout << "Compiling: " << argv[1] << std::endl;
 
-    std::fstream rusticcfile(filename);
+        filename = argv[1];
+        outputfilename = "output.cpp";
+    }
+    else if (argc == 3) {
+            std::cout << "The syntax is: program.exe [source] -o [output]..." << std::endl;
+            return 1;
+    }
+    else if (argc == 4) {
+        std::string output = "-o";
+        if (argv[2] == output) {
+            filename = argv[1];
+            outputfilename = argv[3];
+            std::cout << "Compiling: " << argv[1] << std::endl;
+        }
+    }
+
+    std::fstream rusticcfile(filename.c_str());
 
     // Read file
     std::string rusticcline;
-    std::string linearray;
+    std::string linearray[64];
 
     int linecount = 0;
 
@@ -192,44 +214,37 @@ int main(int argc, char* argv[]) {
     for (int iterator = 0; iterator <= linecount; iterator++) {
         if (iterator == linecount-1) {
             getline(rusticcfile, rusticcline);
-            linearray += rusticcline;
+            linearray[0] += rusticcline;
         }
         else if (iterator < linecount) {
             getline(rusticcfile, rusticcline);
-            linearray += rusticcline + "\n";
+            linearray[0] += rusticcline + "\n";
         }
     }
 
-    // std::cout << linearray[0] << std::endl;
-
     // Pass the source to the parsestring function and return parsed object
-    pools::charpool lexedobject = lex(linearray);
+    pools::charpool lexedobject = lex(linearray[0]);
 
     // Pass the parsed object
     pools::keywordpool parsedobject = parse(lexedobject);
 
-    // Compile
+    // Compiler
     pools::compiledobject compiledobj = compile(parsedobject);
 
-    std::string outputfilename;
-
-    // User input
-    std::cout << "Enter output (.cpp) filename: ";
-    std::cin >> outputfilename;
-
-    std::string outputfile = outputfilename;
-
     // Create file
-    std::ofstream cppfile(outputfile);
+    std::ofstream cppfile(outputfilename.c_str());
 
-    // Writing to file
-    std::cout << "Writing to file: " << outputfile << std::endl;
+    // Print writing to file
+    std::cout << "Writing to: " << outputfilename << std::endl;
+
+    // Write to file
     cppfile << compiledobj.compiledstring[0][0];
 
     // Close the file
     cppfile.close();
 
-    // Create variable for test
+
+    // Create variables for exe output
     std::string answer;
     std::string executable;
 
@@ -242,7 +257,7 @@ int main(int argc, char* argv[]) {
     if (answer == "yes") {
         std::cout << "Give your executable a name: ";
         std::cin >> executable;
-        std::string cmdline = "g++ -o " + executable + " " + outputfile;
+        std::string cmdline = "g++ -o " + executable + " " + outputfilename;
         system(cmdline.c_str());
     } else if (answer == "no") {
         std::cout << "" << std::endl;
