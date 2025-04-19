@@ -8,10 +8,10 @@
 using namespace std;
 
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
-// The rustic c language is just like c/c++ with minor changes:
+// The rustic c language is just like c or c++ with minor changes:
 // int -> integer and float -> decimal
-// just write like normal and pass the .rc file to the program
-// Rustic C kieli on kuin C/C++ kieli mutta pienillä muutoksilla:
+// just write like normal and pass the .rustic file to the program
+// Rustic C kieli on kuin C tai C++ kieli mutta pienillä muutoksilla:
 // int avainsana on -> integer ja float -> decimal.
 // Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle
 // Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa tai ilman.
@@ -172,8 +172,8 @@ int main(int argc, char* argv[]) {
     std::string outputfilename;
 
     if (argc == 1) {
-        std::cout << "Code .rc files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
-        std::cout << "Enter .rc source filename: ";
+        std::cout << "Code .rustic files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
+        std::cout << "Enter .rustic source filename: ";
         std::cin >> filename;
         outputfilename = "output.cpp";
     }
