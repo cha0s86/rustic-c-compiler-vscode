@@ -15,7 +15,7 @@ using namespace std;
 // Rustic C kieli on kuin C tai C++ kieli mutta pienillä muutoksilla:
 // int avainsana on -> integer ja float -> decimal.
 // Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle
-// Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa tai ilman.
+// Syötä ulostulotiedoston nimi tiedostopäätteen kanssa tai ilman.
 // Valitse lopuksi haluatko, että ulostulo kootaan exe tiedostoksi
 
 namespace pools {
