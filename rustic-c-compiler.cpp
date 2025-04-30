@@ -18,6 +18,24 @@ using namespace std;
 // Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa tai ilman.
 // Valitse lopuksi haluatko, että ulostulo kootaan exe tiedostoksi
 
+union pools {
+
+    struct charpool {
+        public:
+            std::string charpool[128][64];
+    };
+
+    struct keywordpool {
+        public:
+            std::string keywordpool[128][64];
+    };
+
+    struct compiledobject {
+        public:
+            std::string compiledstring[128][64];
+    };
+};
+
 std::unordered_set<char> delimiters = {' ', '#', '(', ')', '<', '>', '{', '}', '[', ']', ';', ',', '\n', '\t'};
 
 pools::charpool lex(std::string codetobelexed) {
