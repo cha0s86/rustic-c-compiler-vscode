@@ -30,9 +30,18 @@ namespace pools {
     struct compiledobject {
         std::string compiledString; // Single dynamic string for the compiled output
     };
-}
+};
 
-std::unordered_set<char> specialSymbols = {' ', '#', '(', ')', '<', '>', '{', '}', '[', ']', ';', ',', '\n', '\t'};
+// Define the special symbols as a set for quick lookup
+std::unordered_set<std::string> keywords = {"integer", "decimal", "if", "else", "while", "for", "return"}; // Add more keywords as needed
+std::unordered_set<std::string> operators = {"+", "-", "*", "/", "%", "=", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!"}; // Add more operators as needed
+std::unordered_set<std::string> specialSymbols = {"(", ")", "{", "}", "[", "]", ";", ",", "#"}; // Add more special symbols as needed
+std::unordered_set<std::string> types = {"int", "float", "char", "void", "string", "double"}; // Add more types as needed
+std::unordered_set<std::string> literals = {"true", "false", "null"}; // Add more literals as needed
+std::unordered_set<std::string> comments = {"//", "/*", "*/"}; // Add more comment types as needed
+std::unordered_set<std::string> identifiers; // Add more identifiers as needed
+std::unordered_set<std::string> strings; // Add more string types as needed
+std::unordered_set<std::string> numbers;
 
 pools::charpool lex(std::string codeToBeLexed) {
     pools::charpool CharPool;
@@ -40,26 +49,50 @@ pools::charpool lex(std::string codeToBeLexed) {
     std::string spaceToken; // To accumulate consecutive spaces
 
     for (char c : codeToBeLexed) {
-        if (specialSymbols.count(c)) {
+        if (c == ' ' || c == '\n' || c == '\t') {
             if (!currentWord.empty()) {
-                CharPool.charPool.push_back(currentWord); // Add the current word to the pool
-                currentWord.clear();
+                CharPool.charPool.push_back(currentWord); // Add the current word to charPool
+                currentWord.clear(); // Clear the current word for the next one
             }
             if (c == ' ') {
-                spaceToken += c; // Accumulate spaces
+                spaceToken += " "; // Accumulate spaces
             } else {
                 if (!spaceToken.empty()) {
-                    CharPool.charPool.push_back(spaceToken); // Add the accumulated spaces as a token
+                    CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
                     spaceToken.clear();
                 }
-                CharPool.charPool.push_back(std::string(1, c)); // Add other special symbols as single-character tokens
+                if (c == '\n') {
+                    CharPool.charPool.push_back("\n"); // Add newline to charPool
+                } else if (c == '\t') {
+                    CharPool.charPool.push_back("\t"); // Add tab to charPool
+                }
             }
-        } else {
+        } else if (specialSymbols.find(std::string(1, c)) != specialSymbols.end()) {
+            if (!currentWord.empty()) {
+                CharPool.charPool.push_back(currentWord);
+                currentWord.clear();
+            }
             if (!spaceToken.empty()) {
-                CharPool.charPool.push_back(spaceToken); // Add the accumulated spaces as a token
+                CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
                 spaceToken.clear();
             }
-            currentWord += c; // Append character to the current word
+            CharPool.charPool.push_back(std::string(1, c)); // Add special symbol to charPool
+        } else if (std::isalnum(c) || c == '_') {
+            if (!spaceToken.empty()) {
+                CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
+                spaceToken.clear();
+            }
+            currentWord += c; // Accumulate alphanumeric characters
+        } else {
+            if (!currentWord.empty()) {
+                CharPool.charPool.push_back(currentWord);
+                currentWord.clear();
+            }
+            if (!spaceToken.empty()) {
+                CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
+                spaceToken.clear();
+            }
+            CharPool.charPool.push_back(std::string(1, c)); // Add other characters
         }
     }
 
@@ -74,18 +107,18 @@ pools::charpool lex(std::string codeToBeLexed) {
 }
 
 pools::keywordpool parse(pools::charpool lexedObject) {
+
+    // Parser: This function will parse the lexed object and create a keyword pool
+    // It will treat all words as normal identifiers for now
+    // You can add more complex parsing logic here if needed
+
     pools::keywordpool KeywordPool;
+    std::string currentWord;
+    std::string spaceToken; // To accumulate consecutive spaces
 
-    // Iterate through all words in charpool
-    for (int wordindex = 0; wordindex < lexedObject.charPool.size(); wordindex++) {
-        const std::string& currentWord = lexedObject.charPool[wordindex];
-
-        // Check if the current word is a space
-        if (currentWord == " ") {
-            KeywordPool.keywordPool.push_back(" "); // Add a space token
-        } else {
-            // Add the current word to the keyword pool
-            KeywordPool.keywordPool.push_back(currentWord);
+    for (const std::string& word : lexedObject.charPool) {
+        if (!word.empty()) {
+            KeywordPool.keywordPool.push_back(word);
         }
     }
 
@@ -95,29 +128,23 @@ pools::keywordpool parse(pools::charpool lexedObject) {
 pools::compiledobject compile(pools::keywordpool parsedObject) {
     pools::compiledobject compiledObject;
 
-    // Debug: Print the size of the keyword pool
-    std::cout << "Keyword pool size: " << parsedObject.keywordPool.size() << std::endl;
-
     for (int iterator = 0; iterator < parsedObject.keywordPool.size(); iterator++) {
-        // Debug: Print the current keyword being processed
-        std::cout << "Processing keyword: " << parsedObject.keywordPool[iterator] << std::endl;
+        const std::string& token = parsedObject.keywordPool[iterator];
 
-        if (parsedObject.keywordPool[iterator] == "integer") {
+        if (token == "integer") {
             compiledObject.compiledString += "int";
-        } else if (parsedObject.keywordPool[iterator] == "decimal") {
+        } else if (token == "decimal") {
             compiledObject.compiledString += "float";
-        } else if (parsedObject.keywordPool[iterator] == "\n") {
-            // Only add a newline if it's not the last token
-            if (iterator != parsedObject.keywordPool.size() - 1) {
-                compiledObject.compiledString += "\n";
-            }
+        } else if (token == "\n") {
+            // Add a newline without appending extra spaces
+            compiledObject.compiledString += "\n";
+        } else if (token == " ") {
+            // Add spaces as separate tokens
+            compiledObject.compiledString += " ";
         } else {
-            compiledObject.compiledString += parsedObject.keywordPool[iterator];
+            compiledObject.compiledString += token;
         }
     }
-
-    // Debug: Print the compiled string
-    std::cout << "Compiled string: " << compiledObject.compiledString << std::endl;
 
     return compiledObject;
 }
@@ -132,24 +159,17 @@ int main(int argc, char* argv[]) {
         std::cout << "Enter .rustic source filename: ";
         std::cin >> filename;
         outputfilename = "output.cpp";
-    }
-    else if (argc == 2) {
+    } else if (argc == 2) {
         std::cout << "Compiling: " << argv[1] << std::endl;
-
         filename = argv[1];
         outputfilename = "output.cpp";
-    }
-    else if (argc == 3) {
-            std::cout << "The syntax is: program.exe [source] -o [output]..." << std::endl;
-            return 1;
-    }
-    else if (argc == 4) {
-        std::string output = "-o";
-        if (argv[2] == output) {
-            filename = argv[1];
-            outputfilename = argv[3];
-            std::cout << "Compiling: " << argv[1] << std::endl;
-        }
+    } else if (argc == 4 && std::string(argv[2]) == "-o") {
+        filename = argv[1];
+        outputfilename = argv[3];
+        std::cout << "Compiling: " << argv[1] << std::endl;
+    } else {
+        std::cerr << "Error: Invalid arguments. Usage: program.exe [source] -o [output]" << std::endl;
+        return 1;
     }
 
     std::fstream rusticcfile(filename.c_str());
@@ -164,8 +184,12 @@ int main(int argc, char* argv[]) {
     std::string sourceCode;
     std::string line;
 
+    // Read file line by line
     while (getline(rusticcfile, line)) {
-        sourceCode += line + "\n";
+        sourceCode += line;
+        if (!rusticcfile.eof()) { // Only add a newline if it's not the end of the file
+            sourceCode += "\n";
+        }
     }
 
     if (sourceCode.empty()) {
@@ -173,14 +197,27 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Pass the source to the parsestring function and return parsed object
+    // Debug: Print tokens generated by lex
+    std::cout << "Lexing source code..." << std::endl;
     pools::charpool lexedObject = lex(sourceCode);
+    std::cout << "Lexing completed. Tokens:" << std::endl;
+    for (const auto& token : lexedObject.charPool) {
+        std::cout << "Token: " << token << std::endl;
+    }
 
-    // Pass the parsed object
+    // Debug: Print parsed keywords
+    std::cout << "Parsing tokens..." << std::endl;
     pools::keywordpool parsedObject = parse(lexedObject);
+    std::cout << "Parsing completed. Keywords:" << std::endl;
+    for (const auto& keyword : parsedObject.keywordPool) {
+        std::cout << "Keyword: " << keyword << std::endl;
+    }
 
-    // Compiler
+    // Debug: Print compiled output
+    std::cout << "Compiling keywords..." << std::endl;
     pools::compiledobject compiledObject = compile(parsedObject);
+    std::cout << "Compilation completed. Compiled output:" << std::endl;
+    std::cout << compiledObject.compiledString << std::endl;
 
     // Create file
     std::ofstream cppfile(outputfilename.c_str());
