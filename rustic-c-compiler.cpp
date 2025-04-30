@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include "rustic-c-compiler.h"
+#include <unordered_set>
 using namespace std;
 
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
@@ -16,6 +17,8 @@ using namespace std;
 // Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle
 // Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa tai ilman.
 // Valitse lopuksi haluatko, että ulostulo kootaan exe tiedostoksi
+
+std::unordered_set<char> delimiters = {' ', '#', '(', ')', '<', '>', '{', '}', '[', ']', ';', ',', '\n', '\t'};
 
 pools::charpool lex(std::string codetobelexed) {
 
@@ -31,55 +34,28 @@ pools::charpool lex(std::string codetobelexed) {
     // While codetobelexed[iterator] doesn't equal nullterminate character ('\0')
     for (iterator = 0; codetobelexed[iterator] != '\0'; iterator++)
     {
-        // Check for space bar, if we get space bar, store it in charpool.
-        if (codetobelexed[iterator] == ' '
-            || codetobelexed[iterator] == '#'
-            || codetobelexed[iterator] == '('
-            || codetobelexed[iterator] == ')'
-            || codetobelexed[iterator] == '<'
-            || codetobelexed[iterator] == '>'
-            || codetobelexed[iterator] == '{'
-            || codetobelexed[iterator] == '}'
-            || codetobelexed[iterator] == '['
-            || codetobelexed[iterator] == ']'
-            || codetobelexed[iterator] == ';'
-            || codetobelexed[iterator] == ','
-            || codetobelexed[iterator] == '\n'
-            || codetobelexed[iterator] == '\t')
-            {
-                characterindex = 0;
-                charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                if (codetobelexed[iterator+1] == codetobelexed[iterator]) {
-                    for (int characteriterator = 0; codetobelexed[characteriterator] == codetobelexed[iterator+1]; characteriterator++) {
-                        charpool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
-                    }
-                }
-                wordindex++;
-                characterindex = 0;
-            } 
-            else 
-            {   
-                charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                if (codetobelexed[iterator+1] == ' '
-                    || codetobelexed[iterator+1] == '#'
-                    || codetobelexed[iterator+1] == '('
-                    || codetobelexed[iterator+1] == ')'
-                    || codetobelexed[iterator+1] == '<'
-                    || codetobelexed[iterator+1] == '>'
-                    || codetobelexed[iterator+1] == '{'
-                    || codetobelexed[iterator+1] == '}'
-                    || codetobelexed[iterator+1] == '('
-                    || codetobelexed[iterator+1] == ')'
-                    || codetobelexed[iterator+1] == ';'
-                    || codetobelexed[iterator+1] == ','
-                    || codetobelexed[iterator+1] == '\n'
-                    || codetobelexed[iterator+1] == '\t') {
-                        wordindex++;
-                } else 
-                {
-                    characterindex++;
+        if (delimiters.count(codetobelexed[iterator])) {
+            // Handle delimiter
+            characterindex = 0;
+            charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+            if (codetobelexed[iterator+1] == codetobelexed[iterator]) {
+                for (int characteriterator = 0; codetobelexed[characteriterator] == codetobelexed[iterator+1]; characteriterator++) {
+                    charpool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
                 }
             }
+            wordindex++;
+            characterindex = 0;
+        } 
+        else 
+        {   
+            charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
+            if (delimiters.count(codetobelexed[iterator+1])) {
+                    wordindex++;
+            } else 
+            {
+                characterindex++;
+            }
+        }
     }
     return charpool;
 }
@@ -196,6 +172,12 @@ int main(int argc, char* argv[]) {
     }
 
     std::fstream rusticcfile(filename.c_str());
+
+    // Check if file opened successfully
+    if (!rusticcfile.is_open()) {
+        std::cerr << "Error: Could not open file " << filename << std::endl;
+        return 1;
+    }
 
     // Read file
     std::string rusticcline;
