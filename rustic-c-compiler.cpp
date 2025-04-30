@@ -74,7 +74,7 @@ pools::charpool lex(std::string codeToBeLexed) {
 }
 
 pools::keywordpool parse(pools::charpool lexedObject) {
-    pools::keywordpool keywordPool;
+    pools::keywordpool KeywordPool;
 
     // Iterate through all words in charpool
     for (int wordindex = 0; wordindex < lexedObject.charPool.size(); wordindex++) {
@@ -82,41 +82,44 @@ pools::keywordpool parse(pools::charpool lexedObject) {
 
         // Check if the current word is a space
         if (currentWord == " ") {
-            keywordPool.keywordPool.push_back(" "); // Add a space token
+            KeywordPool.keywordPool.push_back(" "); // Add a space token
         } else {
             // Add the current word to the keyword pool
-            keywordPool.keywordPool.push_back(currentWord);
+            KeywordPool.keywordPool.push_back(currentWord);
         }
     }
 
-    return keywordPool;
+    return KeywordPool;
 }
 
-pools::compiledobject compile(pools::keywordpool parsedobject) {
-    pools::compiledobject compiledobj;
+pools::compiledobject compile(pools::keywordpool parsedObject) {
+    pools::compiledobject compiledObject;
 
     // Debug: Print the size of the keyword pool
-    std::cout << "Keyword pool size: " << parsedobject.keywordpool.size() << std::endl;
+    std::cout << "Keyword pool size: " << parsedObject.keywordPool.size() << std::endl;
 
-    for (int iterator = 0; iterator < parsedobject.keywordpool.size(); iterator++) {
+    for (int iterator = 0; iterator < parsedObject.keywordPool.size(); iterator++) {
         // Debug: Print the current keyword being processed
-        std::cout << "Processing keyword: " << parsedobject.keywordpool[iterator] << std::endl;
+        std::cout << "Processing keyword: " << parsedObject.keywordPool[iterator] << std::endl;
 
-        if (parsedobject.keywordpool[iterator] == "integer") {
-            compiledobj.compiledstring += "int ";
-        } else if (parsedobject.keywordpool[iterator] == "decimal") {
-            compiledobj.compiledstring += "float ";
-        } else if (parsedobject.keywordpool[iterator] == "\n") {
-            compiledobj.compiledstring += "\n";
+        if (parsedObject.keywordPool[iterator] == "integer") {
+            compiledObject.compiledString += "int";
+        } else if (parsedObject.keywordPool[iterator] == "decimal") {
+            compiledObject.compiledString += "float";
+        } else if (parsedObject.keywordPool[iterator] == "\n") {
+            // Only add a newline if it's not the last token
+            if (iterator != parsedObject.keywordPool.size() - 1) {
+                compiledObject.compiledString += "\n";
+            }
         } else {
-            compiledobj.compiledstring += parsedobject.keywordpool[iterator] + " ";
+            compiledObject.compiledString += parsedObject.keywordPool[iterator];
         }
     }
 
     // Debug: Print the compiled string
-    std::cout << "Compiled string: " << compiledobj.compiledstring << std::endl;
+    std::cout << "Compiled string: " << compiledObject.compiledString << std::endl;
 
-    return compiledobj;
+    return compiledObject;
 }
 
 int main(int argc, char* argv[]) {
@@ -171,13 +174,13 @@ int main(int argc, char* argv[]) {
     }
 
     // Pass the source to the parsestring function and return parsed object
-    pools::charpool lexedobject = lex(sourceCode);
+    pools::charpool lexedObject = lex(sourceCode);
 
     // Pass the parsed object
-    pools::keywordpool parsedobject = parse(lexedobject);
+    pools::keywordpool parsedObject = parse(lexedObject);
 
     // Compiler
-    pools::compiledobject compiledobj = compile(parsedobject);
+    pools::compiledobject compiledObject = compile(parsedObject);
 
     // Create file
     std::ofstream cppfile(outputfilename.c_str());
@@ -186,7 +189,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Writing to: " << outputfilename << std::endl;
 
     // Write to file
-    cppfile << compiledobj.compiledstring;
+    cppfile << compiledObject.compiledString;
 
     // Close the file
     cppfile.close();

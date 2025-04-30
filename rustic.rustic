@@ -2,8 +2,5 @@
 
 integer main() {
 
-    integer a = 0;
-    decimal b = 0;
-    
     return 0;
 }
