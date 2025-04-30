@@ -49,7 +49,6 @@ pools::charpool lex(std::string codetobelexed) {
             {
                 characterindex = 0;
                 charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-                characterindex = 0;
                 if (codetobelexed[iterator+1] == codetobelexed[iterator]) {
                     for (int characteriterator = 0; codetobelexed[characteriterator] == codetobelexed[iterator+1]; characteriterator++) {
                         charpool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
@@ -263,7 +262,7 @@ int main(int argc, char* argv[]) {
         std::cout << "" << std::endl;
     } else {
 
-        std::cout << "Error: the options are yes and no." << std::endl;
+        std::cout << "Syntax error: please enter correct syntax" << std::endl;
     }
 
     // Pause
