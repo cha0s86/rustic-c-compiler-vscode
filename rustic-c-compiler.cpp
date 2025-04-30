@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <unordered_set>
+#include <vector>
 using namespace std;
 
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
@@ -17,109 +18,74 @@ using namespace std;
 // Syötä ulostulo tiedoston nimi tiedostopäätteen kanssa tai ilman.
 // Valitse lopuksi haluatko, että ulostulo kootaan exe tiedostoksi
 
-union pools {
-
+namespace pools {
     struct charpool {
-        public:
-            std::string charpool[128][64];
+        std::vector<std::string> charPool; // Dynamic list of strings
     };
 
     struct keywordpool {
-        public:
-            std::string keywordpool[128][64];
+        std::vector<std::string> keywordPool; // Dynamic list of strings
     };
 
     struct compiledobject {
-        public:
-            std::string compiledstring[128][64];
+        std::string compiledString; // Single dynamic string for the compiled output
     };
-};
-
-std::unordered_set<char> delimiters = {' ', '#', '(', ')', '<', '>', '{', '}', '[', ']', ';', ',', '\n', '\t'};
-
-pools::charpool lex(std::string codetobelexed) {
-
-    // Create object for accessing pools
-    pools::charpool charpool;
-
-    int iterator = 0;       // Iterator for scanning and/or counting
-    int wordindex = 0;      // Iterator for scanning words
-    int characterindex = 0; // Iterator for scanning characters
-    
-    // Create parser for dividing string into keywords and storing them in an array.
-
-    // While codetobelexed[iterator] doesn't equal nullterminate character ('\0')
-    for (iterator = 0; codetobelexed[iterator] != '\0'; iterator++)
-    {
-        if (delimiters.count(codetobelexed[iterator])) {
-            // Handle delimiter
-            characterindex = 0;
-            charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-            if (codetobelexed[iterator+1] == codetobelexed[iterator]) {
-                for (int characteriterator = 0; codetobelexed[characteriterator] == codetobelexed[iterator+1]; characteriterator++) {
-                    charpool.charpool[wordindex][characterindex] = codetobelexed[iterator+1];
-                }
-            }
-            wordindex++;
-            characterindex = 0;
-        } 
-        else 
-        {   
-            charpool.charpool[wordindex][characterindex] = codetobelexed[iterator];
-            if (delimiters.count(codetobelexed[iterator+1])) {
-                    wordindex++;
-            } else 
-            {
-                characterindex++;
-            }
-        }
-    }
-    return charpool;
 }
 
-pools::keywordpool parse(pools::charpool lexedobject) {
+std::unordered_set<char> specialSymbols = {' ', '#', '(', ')', '<', '>', '{', '}', '[', ']', ';', ',', '\n', '\t'};
 
-    // Create object for variable pool
-    pools::keywordpool keywordPool;
+pools::charpool lex(std::string codeToBeLexed) {
+    pools::charpool CharPool;
+    std::string currentWord;
+    std::string spaceToken; // To accumulate consecutive spaces
 
-    // Create variables for iterating...
-    int iterator = 0;        // Iterator for loops, counts the cycles
-    int wordindex = 0;        // Word index iterator
-    int worditerator = 0;        // Word index iterator #2 (fixed the whole program)
-    int characterindex = 0;        // Character index iterator
-
-    // Counter for words in charpool 
-    int wordcounter = 0;
-
-    // Count all words in charpool
-    // For as long as charpool[iterator][0] != "\0", wordcounter++ and iterator++;
-    for (int iterator = 0; lexedobject.charpool[iterator][0] != "\0"; iterator++) {
-        wordcounter++;
+    for (char c : codeToBeLexed) {
+        if (specialSymbols.count(c)) {
+            if (!currentWord.empty()) {
+                CharPool.charPool.push_back(currentWord); // Add the current word to the pool
+                currentWord.clear();
+            }
+            if (c == ' ') {
+                spaceToken += c; // Accumulate spaces
+            } else {
+                if (!spaceToken.empty()) {
+                    CharPool.charPool.push_back(spaceToken); // Add the accumulated spaces as a token
+                    spaceToken.clear();
+                }
+                CharPool.charPool.push_back(std::string(1, c)); // Add other special symbols as single-character tokens
+            }
+        } else {
+            if (!spaceToken.empty()) {
+                CharPool.charPool.push_back(spaceToken); // Add the accumulated spaces as a token
+                spaceToken.clear();
+            }
+            currentWord += c; // Append character to the current word
+        }
     }
 
-    // For all words in wordlist; do for loop with clause (lexedobject.charpool[wordindex][worditerator] != "\0")
-    // and set the keys, as normal. then, when we get "\0"
-    for (iterator = 0; iterator <= wordcounter; iterator++) {
+    if (!currentWord.empty()) {
+        CharPool.charPool.push_back(currentWord); // Add the last word
+    }
+    if (!spaceToken.empty()) {
+        CharPool.charPool.push_back(spaceToken); // Add the last accumulated spaces
+    }
 
-        // Count the length of every word with characterindex, until ntchar2 found...
-        // and set the keys, this sets the integer key perfectly, next we need to check for space...
-        for (worditerator = 0; lexedobject.charpool[wordindex][worditerator] != "\0"; worditerator++) {
-            keywordPool.keywordpool[wordindex][0] += lexedobject.charpool[wordindex][characterindex];
-            characterindex++;
-        }
+    return CharPool;
+}
 
-        // To check for the space bar we need to increment wordindex by 1
-        wordindex++;
-        characterindex = 0;
+pools::keywordpool parse(pools::charpool lexedObject) {
+    pools::keywordpool keywordPool;
 
-        // If we get a space, wordindex++ and reset characterindex and go for the next word
-        if (lexedobject.charpool[wordindex][characterindex] == " ") {
-            // Here we can decide if we want to include spaces or not
-            keywordPool.keywordpool[wordindex][0] = " "; // Comment out this line to not include spaces
-            // Increment wordindex, for getting the next word since space is only 1-letter.
-            wordindex++;
-            // After setting the key, just reset characterindex for the next character.
-            characterindex = 0;
+    // Iterate through all words in charpool
+    for (int wordindex = 0; wordindex < lexedObject.charPool.size(); wordindex++) {
+        const std::string& currentWord = lexedObject.charPool[wordindex];
+
+        // Check if the current word is a space
+        if (currentWord == " ") {
+            keywordPool.keywordPool.push_back(" "); // Add a space token
+        } else {
+            // Add the current word to the keyword pool
+            keywordPool.keywordPool.push_back(currentWord);
         }
     }
 
@@ -127,34 +93,29 @@ pools::keywordpool parse(pools::charpool lexedobject) {
 }
 
 pools::compiledobject compile(pools::keywordpool parsedobject) {
-
-    // Count the number of arrays/words in struct
-    int wordindex = 0;   // Create variable for iterating through wordindexes
-
-    // Define combiledobj object
     pools::compiledobject compiledobj;
 
-    // For as long as keywordpool[wordindex][0] != dk_ntchar
-    // check if data types found and convert them
-    for (int iterator = 0; parsedobject.keywordpool[iterator][0] != "\0"; iterator++) {
+    // Debug: Print the size of the keyword pool
+    std::cout << "Keyword pool size: " << parsedobject.keywordpool.size() << std::endl;
 
-        if (parsedobject.keywordpool[iterator][0] == "integer") {
-            parsedobject.keywordpool[iterator][0] = "int";
-        }
+    for (int iterator = 0; iterator < parsedobject.keywordpool.size(); iterator++) {
+        // Debug: Print the current keyword being processed
+        std::cout << "Processing keyword: " << parsedobject.keywordpool[iterator] << std::endl;
 
-        if (parsedobject.keywordpool[iterator][0] == "decimal") {
-            parsedobject.keywordpool[iterator][0] = "float";
+        if (parsedobject.keywordpool[iterator] == "integer") {
+            compiledobj.compiledstring += "int ";
+        } else if (parsedobject.keywordpool[iterator] == "decimal") {
+            compiledobj.compiledstring += "float ";
+        } else if (parsedobject.keywordpool[iterator] == "\n") {
+            compiledobj.compiledstring += "\n";
+        } else {
+            compiledobj.compiledstring += parsedobject.keywordpool[iterator] + " ";
         }
-        
-        
     }
 
-    // combine the keywords into an compiledpool array
-    for (int iterator = 0; parsedobject.keywordpool[iterator][0] != "\0"; iterator++) {
-        compiledobj.compiledstring[0][0] += parsedobject.keywordpool[iterator][0];
-    }
+    // Debug: Print the compiled string
+    std::cout << "Compiled string: " << compiledobj.compiledstring << std::endl;
 
-    // Return the compiled object
     return compiledobj;
 }
 
@@ -197,31 +158,20 @@ int main(int argc, char* argv[]) {
     }
 
     // Read file
-    std::string rusticcline;
-    std::string linearray[64];
+    std::string sourceCode;
+    std::string line;
 
-    int linecount = 0;
-
-    while (getline(rusticcfile, rusticcline)) {
-        linecount++;
+    while (getline(rusticcfile, line)) {
+        sourceCode += line + "\n";
     }
 
-    rusticcfile.clear();
-    rusticcfile.seekg(0);
-
-    for (int iterator = 0; iterator <= linecount; iterator++) {
-        if (iterator == linecount-1) {
-            getline(rusticcfile, rusticcline);
-            linearray[0] += rusticcline;
-        }
-        else if (iterator < linecount) {
-            getline(rusticcfile, rusticcline);
-            linearray[0] += rusticcline + "\n";
-        }
+    if (sourceCode.empty()) {
+        std::cerr << "Error: Source file is empty." << std::endl;
+        return 1;
     }
 
     // Pass the source to the parsestring function and return parsed object
-    pools::charpool lexedobject = lex(linearray[0]);
+    pools::charpool lexedobject = lex(sourceCode);
 
     // Pass the parsed object
     pools::keywordpool parsedobject = parse(lexedobject);
@@ -236,7 +186,7 @@ int main(int argc, char* argv[]) {
     std::cout << "Writing to: " << outputfilename << std::endl;
 
     // Write to file
-    cppfile << compiledobj.compiledstring[0][0];
+    cppfile << compiledobj.compiledstring;
 
     // Close the file
     cppfile.close();
