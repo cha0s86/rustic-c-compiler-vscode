@@ -18,19 +18,19 @@ using namespace std;
 // Syötä ulostulotiedoston nimi tiedostopäätteen kanssa tai ilman.
 // Valitse lopuksi haluatko, että ulostulo kootaan exe tiedostoksi
 
-namespace pools {
-    struct charpool {
+namespace rustic {
+    struct CharPool {
         std::vector<std::string> charPool; // Dynamic list of strings
     };
 
-    struct keywordpool {
+    struct KeywordPool {
         std::vector<std::string> keywordPool; // Dynamic list of strings
     };
 
-    struct compiledobject {
+    struct CompiledObject {
         std::string compiledString; // Single dynamic string for the compiled output
     };
-};
+}
 
 // Define the special symbols as a set for quick lookup
 std::unordered_set<std::string> keywords = {"integer", "decimal", "if", "else", "while", "for", "return"}; // Add more keywords as needed
@@ -43,90 +43,90 @@ std::unordered_set<std::string> identifiers; // Add more identifiers as needed
 std::unordered_set<std::string> strings; // Add more string types as needed
 std::unordered_set<std::string> numbers;
 
-pools::charpool lex(std::string codeToBeLexed) {
-    pools::charpool CharPool;
+rustic::CharPool lex(std::string codeToBeLexed) {
+    rustic::CharPool charPool;
     std::string currentWord;
-    std::string spaceToken; // To accumulate consecutive spaces
+    std::string accumulatedSpaces; // To accumulate consecutive spaces
 
     for (char c : codeToBeLexed) {
         if (c == ' ' || c == '\n' || c == '\t') {
             if (!currentWord.empty()) {
-                CharPool.charPool.push_back(currentWord); // Add the current word to charPool
+                charPool.charPool.push_back(currentWord); // Add the current word to charPool
                 currentWord.clear(); // Clear the current word for the next one
             }
             if (c == ' ') {
-                spaceToken += " "; // Accumulate spaces
+                accumulatedSpaces += " "; // Accumulate spaces
             } else {
-                if (!spaceToken.empty()) {
-                    CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
-                    spaceToken.clear();
+                if (!accumulatedSpaces.empty()) {
+                    charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
+                    accumulatedSpaces.clear();
                 }
                 if (c == '\n') {
-                    CharPool.charPool.push_back("\n"); // Add newline to charPool
+                    charPool.charPool.push_back("\n"); // Add newline to charPool
                 } else if (c == '\t') {
-                    CharPool.charPool.push_back("\t"); // Add tab to charPool
+                    charPool.charPool.push_back("\t"); // Add tab to charPool
                 }
             }
         } else if (specialSymbols.find(std::string(1, c)) != specialSymbols.end()) {
             if (!currentWord.empty()) {
-                CharPool.charPool.push_back(currentWord);
+                charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            if (!spaceToken.empty()) {
-                CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
-                spaceToken.clear();
+            if (!accumulatedSpaces.empty()) {
+                charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
+                accumulatedSpaces.clear();
             }
-            CharPool.charPool.push_back(std::string(1, c)); // Add special symbol to charPool
+            charPool.charPool.push_back(std::string(1, c)); // Add special symbol to charPool
         } else if (std::isalnum(c) || c == '_') {
-            if (!spaceToken.empty()) {
-                CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
-                spaceToken.clear();
+            if (!accumulatedSpaces.empty()) {
+                charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
+                accumulatedSpaces.clear();
             }
             currentWord += c; // Accumulate alphanumeric characters
         } else {
             if (!currentWord.empty()) {
-                CharPool.charPool.push_back(currentWord);
+                charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            if (!spaceToken.empty()) {
-                CharPool.charPool.push_back(spaceToken); // Add accumulated spaces
-                spaceToken.clear();
+            if (!accumulatedSpaces.empty()) {
+                charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
+                accumulatedSpaces.clear();
             }
-            CharPool.charPool.push_back(std::string(1, c)); // Add other characters
+            charPool.charPool.push_back(std::string(1, c)); // Add other characters
         }
     }
 
     if (!currentWord.empty()) {
-        CharPool.charPool.push_back(currentWord); // Add the last word
+        charPool.charPool.push_back(currentWord); // Add the last word
     }
-    if (!spaceToken.empty()) {
-        CharPool.charPool.push_back(spaceToken); // Add the last accumulated spaces
+    if (!accumulatedSpaces.empty()) {
+        charPool.charPool.push_back(accumulatedSpaces); // Add the last accumulated spaces
     }
 
-    return CharPool;
+    return charPool;
 }
 
-pools::keywordpool parse(pools::charpool lexedObject) {
+rustic::KeywordPool parse(rustic::CharPool lexedObject) {
 
     // Parser: This function will parse the lexed object and create a keyword pool
     // It will treat all words as normal identifiers for now
     // You can add more complex parsing logic here if needed
 
-    pools::keywordpool KeywordPool;
+    rustic::KeywordPool keywordPool;
     std::string currentWord;
     std::string spaceToken; // To accumulate consecutive spaces
 
     for (const std::string& word : lexedObject.charPool) {
         if (!word.empty()) {
-            KeywordPool.keywordPool.push_back(word);
+            keywordPool.keywordPool.push_back(word);
         }
     }
 
-    return KeywordPool;
+    return keywordPool;
 }
 
-pools::compiledobject compile(pools::keywordpool parsedObject) {
-    pools::compiledobject compiledObject;
+rustic::CompiledObject compile(rustic::KeywordPool parsedObject) {
+    rustic::CompiledObject compiledObject;
 
     for (int iterator = 0; iterator < parsedObject.keywordPool.size(); iterator++) {
         const std::string& token = parsedObject.keywordPool[iterator];
@@ -199,23 +199,17 @@ int main(int argc, char* argv[]) {
 
     // Debug: Print tokens generated by lex
     std::cout << "Lexing source code..." << std::endl;
-    pools::charpool lexedObject = lex(sourceCode);
-    std::cout << "Lexing completed. Tokens:" << std::endl;
-    for (const auto& token : lexedObject.charPool) {
-        std::cout << "Token: " << token << std::endl;
-    }
+    rustic::CharPool lexedObject = lex(sourceCode);
+    std::cout << "Lexing completed." << std::endl;
 
     // Debug: Print parsed keywords
     std::cout << "Parsing tokens..." << std::endl;
-    pools::keywordpool parsedObject = parse(lexedObject);
-    std::cout << "Parsing completed. Keywords:" << std::endl;
-    for (const auto& keyword : parsedObject.keywordPool) {
-        std::cout << "Keyword: " << keyword << std::endl;
-    }
+    rustic::KeywordPool parsedObject = parse(lexedObject);
+    std::cout << "Parsing completed." << std::endl;
 
     // Debug: Print compiled output
     std::cout << "Compiling keywords..." << std::endl;
-    pools::compiledobject compiledObject = compile(parsedObject);
+    rustic::CompiledObject compiledObject = compile(parsedObject);
     std::cout << "Compilation completed. Compiled output:" << std::endl;
     std::cout << compiledObject.compiledString << std::endl;
 
