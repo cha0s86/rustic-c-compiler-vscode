@@ -110,15 +110,17 @@ rustic::KeywordPool parse(rustic::CharPool lexedObject) {
 
     // Parser: This function will parse the lexed object and create a keyword pool
     // It will treat all words as normal identifiers for now
-    // You can add more complex parsing logic here if needed
+    // You can add more complex parsing logic here if needed.
 
     rustic::KeywordPool keywordPool;
     std::string currentWord;
-    std::string spaceToken; // To accumulate consecutive spaces
 
-    for (const std::string& word : lexedObject.charPool) {
-        if (!word.empty()) {
-            keywordPool.keywordPool.push_back(word);
+    std::string accumulatedSpaces; // To accumulate consecutive spaces
+    for (const std::string& token : lexedObject.charPool) {
+        if (keywords.find(token) != keywords.end()) {
+            keywordPool.keywordPool.push_back(token);
+        } else {
+            keywordPool.keywordPool.push_back(token);
         }
     }
 
@@ -138,9 +140,6 @@ rustic::CompiledObject compile(rustic::KeywordPool parsedObject) {
         } else if (token == "\n") {
             // Add a newline without appending extra spaces
             compiledObject.compiledString += "\n";
-        } else if (token == " ") {
-            // Add spaces as separate tokens
-            compiledObject.compiledString += " ";
         } else {
             compiledObject.compiledString += token;
         }
