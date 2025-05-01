@@ -137,9 +137,6 @@ rustic::CompiledObject compile(rustic::KeywordPool parsedObject) {
             compiledObject.compiledString += "int";
         } else if (token == "decimal") {
             compiledObject.compiledString += "float";
-        } else if (token == "\n") {
-            // Add a newline without appending extra spaces
-            compiledObject.compiledString += "\n";
         } else {
             compiledObject.compiledString += token;
         }
