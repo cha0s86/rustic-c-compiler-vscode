@@ -54,6 +54,9 @@
         "xutility": "cpp",
         "list": "cpp",
         "unordered_set": "cpp",
-        "xhash": "cpp"
+        "xhash": "cpp",
+        "algorithm": "cpp",
+        "optional": "cpp",
+        "regex": "cpp"
     }
 }

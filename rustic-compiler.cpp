@@ -35,7 +35,7 @@ namespace rustic {
 // Define the special symbols as a set for quick lookup
 std::unordered_set<std::string> keywords = {"integer", "decimal", "if", "else", "while", "for", "return"}; // Add more keywords as needed
 std::unordered_set<std::string> operators = {"+", "-", "*", "/", "%", "=", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!"}; // Add more operators as needed
-std::unordered_set<std::string> specialSymbols = {"(", ")", "{", "}", "[", "]", ";", ",", "#"}; // Add more special symbols as needed
+std::unordered_set<char> specialSymbols = {'(', ')', '{', '}', '[', ']', ';', ',', '#'}; // Add more special symbols as needed
 std::unordered_set<std::string> types = {"int", "float", "char", "void", "string", "double"}; // Add more types as needed
 std::unordered_set<std::string> literals = {"true", "false", "null"}; // Add more literals as needed
 std::unordered_set<std::string> comments = {"//", "/*", "*/"}; // Add more comment types as needed
@@ -43,64 +43,43 @@ std::unordered_set<std::string> identifiers; // Add more identifiers as needed
 std::unordered_set<std::string> strings; // Add more string types as needed
 std::unordered_set<std::string> numbers;
 
-rustic::CharPool lex(std::string codeToBeLexed) {
+rustic::CharPool lex(const std::string& codeToBeLexed) {
     rustic::CharPool charPool;
     std::string currentWord;
-    std::string accumulatedSpaces; // To accumulate consecutive spaces
 
     for (char c : codeToBeLexed) {
-        if (c == ' ' || c == '\n' || c == '\t') {
-            if (!currentWord.empty()) {
-                charPool.charPool.push_back(currentWord); // Add the current word to charPool
-                currentWord.clear(); // Clear the current word for the next one
-            }
-            if (c == ' ') {
-                accumulatedSpaces += " "; // Accumulate spaces
-            } else {
-                if (!accumulatedSpaces.empty()) {
-                    charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
-                    accumulatedSpaces.clear();
-                }
-                if (c == '\n') {
-                    charPool.charPool.push_back("\n"); // Add newline to charPool
-                } else if (c == '\t') {
-                    charPool.charPool.push_back("\t"); // Add tab to charPool
-                }
-            }
-        } else if (specialSymbols.find(std::string(1, c)) != specialSymbols.end()) {
+
+        if (std::isalnum(c)) {
+            currentWord += c;
+        } else if (std::isspace(c)) {
             if (!currentWord.empty()) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            if (!accumulatedSpaces.empty()) {
-                charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
-                accumulatedSpaces.clear();
+            if (c == ' ') {  
+                charPool.charPool.push_back(" ");
+            } else if (c == '\n') {
+                charPool.charPool.push_back("\n");
+            } else if (c == '\t') {
+                charPool.charPool.push_back("\t");
             }
-            charPool.charPool.push_back(std::string(1, c)); // Add special symbol to charPool
-        } else if (std::isalnum(c) || c == '_') {
-            if (!accumulatedSpaces.empty()) {
-                charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
-                accumulatedSpaces.clear();
+        } else if (specialSymbols.find(c) != specialSymbols.end()) {
+            if (!currentWord.empty()) {
+                charPool.charPool.push_back(currentWord);
+                currentWord.clear();
             }
-            currentWord += c; // Accumulate alphanumeric characters
+            charPool.charPool.push_back(std::string(1, c));
         } else {
             if (!currentWord.empty()) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            if (!accumulatedSpaces.empty()) {
-                charPool.charPool.push_back(accumulatedSpaces); // Add accumulated spaces
-                accumulatedSpaces.clear();
-            }
-            charPool.charPool.push_back(std::string(1, c)); // Add other characters
+            charPool.charPool.push_back(std::string(1, c));
         }
     }
 
     if (!currentWord.empty()) {
         charPool.charPool.push_back(currentWord); // Add the last word
-    }
-    if (!accumulatedSpaces.empty()) {
-        charPool.charPool.push_back(accumulatedSpaces); // Add the last accumulated spaces
     }
 
     return charPool;
