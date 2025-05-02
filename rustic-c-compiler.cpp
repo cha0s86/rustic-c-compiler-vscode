@@ -154,11 +154,17 @@ int main(int argc, char* argv[]) {
         std::cout << "Code .rustic files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
         std::cout << "Enter .rustic source filename: ";
         std::cin >> filename;
-        outputfilename = "output.cpp";
+
+        // Prompt user for output filename
+        std::cout << "Enter output filename (e.g., output.cpp): ";
+        std::cin >> outputfilename;
     } else if (argc == 2) {
         std::cout << "Compiling: " << argv[1] << std::endl;
         filename = argv[1];
-        outputfilename = "output.cpp";
+
+        // Prompt user for output filename
+        std::cout << "Enter output filename (e.g., output.cpp): ";
+        std::cin >> outputfilename;
     } else if (argc == 4 && std::string(argv[2]) == "-o") {
         filename = argv[1];
         outputfilename = argv[3];
@@ -206,8 +212,7 @@ int main(int argc, char* argv[]) {
     // Debug: Print compiled output
     std::cout << "Compiling keywords..." << std::endl;
     rustic::CompiledObject compiledObject = compile(parsedObject);
-    std::cout << "Compilation completed. Compiled output:" << std::endl;
-    std::cout << compiledObject.compiledString << std::endl;
+    std::cout << "Compilation completed." << std::endl;
 
     // Create file
     std::ofstream cppfile(outputfilename.c_str());
@@ -220,7 +225,6 @@ int main(int argc, char* argv[]) {
 
     // Close the file
     cppfile.close();
-
 
     // Create variables for exe output
     std::string answer;
