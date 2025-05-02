@@ -10,10 +10,10 @@ using namespace std;
 
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
 // The rustic c language is just like c or c++ with minor changes:
-// int -> integer and float -> decimal
+// int -> int and float -> float
 // just write like normal and pass the .rustic file to the program
 // Rustic C kieli on kuin C tai C++ kieli mutta pienillä muutoksilla:
-// int avainsana on -> integer ja float -> decimal.
+// int avainsana on -> int ja float -> float.
 // Kirjoita normaalisti kuin C tai C++ kieltä ja syötä tiedostonimi kääntäjälle
 // Syötä ulostulotiedoston nimi tiedostopäätteen kanssa tai ilman.
 // Valitse lopuksi haluatko, että ulostulo kootaan exe tiedostoksi
@@ -33,7 +33,7 @@ namespace rustic {
 }
 
 // Define the special symbols as a set for quick lookup
-std::unordered_set<std::string> keywords = {"integer", "decimal", "if", "else", "while", "for", "return"}; // Add more keywords as needed
+std::unordered_set<std::string> keywords = {"int", "float", "if", "else", "while", "for", "return"}; // Add more keywords as needed
 std::unordered_set<std::string> operators = {"+", "-", "*", "/", "%", "=", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!"}; // Add more operators as needed
 std::unordered_set<char> specialSymbols = {'(', ')', '{', '}', '[', ']', ';', ',', '#'}; // Add more special symbols as needed
 std::unordered_set<std::string> types = {"int", "float", "char", "void", "string", "double"}; // Add more types as needed
@@ -128,9 +128,9 @@ rustic::CompiledObject compile(rustic::KeywordPool parsedObject) {
     for (int iterator = 0; iterator < parsedObject.keywordPool.size(); iterator++) {
         const std::string& token = parsedObject.keywordPool[iterator];
 
-        if (token == "integer") {
+        if (token == "int") {
             compiledObject.compiledString += "int";
-        } else if (token == "decimal") {
+        } else if (token == "float") {
             compiledObject.compiledString += "float";
         } else {
             compiledObject.compiledString += token;
@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
     std::string outputfilename;
 
     if (argc == 1) {
-        std::cout << "Code .rustic files like c/c++ but don't use int and float, use integer and decimal!" << std::endl;
+        std::cout << "Code .rustic files like c/c++ but don't use int and float, use int and float!" << std::endl;
         std::cout << "Enter .rustic source filename: ";
         std::cin >> filename;
 
