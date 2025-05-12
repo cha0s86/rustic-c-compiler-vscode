@@ -36,7 +36,7 @@ namespace rustic {
 std::unordered_set<std::string> keywords = {"integer", "decimal", "if", "else", "while", "for", "return"}; // Add more keywords as needed
 std::unordered_set<std::string> operators = {"+", "-", "*", "/", "%", "=", "==", "!=", "<", ">", "<=", ">=", "&&", "||", "!"}; // Add more operators as needed
 std::unordered_set<char> specialSymbols = {'(', ')', '{', '}', '[', ']', ';', ',', '#'}; // Add more special symbols as needed
-std::unordered_set<std::string> types = {"int", "float", "char", "void", "string", "double"}; // Add more types as needed
+std::unordered_set<std::string> cpptypes = {"int", "float", "char", "void", "string", "double"}; // Add more types as needed
 std::unordered_set<std::string> literals = {"true", "false", "null"}; // Add more literals as needed
 std::unordered_set<std::string> comments = {"//", "/*", "*/"}; // Add more comment types as needed
 std::unordered_set<std::string> identifiers; // Add more identifiers as needed

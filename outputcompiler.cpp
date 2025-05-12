@@ -8,6 +8,15 @@
 #include <vector>
 using namespace std;
 
+// Is my project a compiler?
+
+// Yes, your project is a basic compiler.
+// It takes source code written in a custom "Rustic C" language,
+// lexes it into tokens, parses the tokens, and compiles them into C++ code.
+// It even provides an option to generate an executable using `g++`.
+// However, it is still quite rudimentary and lacks advanced features like
+// error handling, optimization, or support for complex language constructs.
+
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
 // The rustic c language is just like c or c++ with minor changes:
 // int -> int and float -> float
