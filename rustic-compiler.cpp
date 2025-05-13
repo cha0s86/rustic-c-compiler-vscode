@@ -6,7 +6,17 @@
 #include <string>
 #include <unordered_set>
 #include <vector>
+
 using namespace std;
+
+// Is my project a compiler?
+
+// Yes, your project is a basic compiler.
+// It takes source code written in a custom "Rustic C" language,
+// lexes it into tokens, parses the tokens, and compiles them into C++ code.
+// It even provides an option to generate an executable using `g++`.
+// However, it is still quite rudimentary and lacks advanced features like
+// error handling, optimization, or support for complex language constructs.
 
 // パソコンと言うことは物とか事とか？　事と物の違いはなんですか？
 // The rustic c language is just like c or c++ with minor changes:
@@ -43,44 +53,44 @@ std::unordered_set<std::string> identifiers; // Add more identifiers as needed
 std::unordered_set<std::string> strings; // Add more string types as needed
 std::unordered_set<std::string> numbers;
 
-rustic::CharPool lex(const std::string& charizards) {
+rustic::CharPool lex(const std::string& characters) {
     rustic::CharPool charPool;
     std::string currentWord;
 
-    for (char charmander : charizards) {
+    for (char chr : characters) {
 
         // Check if the character is a letter or digit
         // If it is, add it to the current word
-        if (std::isalpha(charmander) || std::isdigit(charmander)) {
-            currentWord += charmander;
-        } else if (charmander == '_') { // Allow underscores in identifiers
-            currentWord += charmander;
+        if (std::isalpha(chr) || std::isdigit(chr)) {
+            currentWord += chr;
+        } else if (chr == '_') { // Allow underscores in identifiers
+            currentWord += chr;
         }
 
         // Check if the character is a space or newline
         // If it is, add the current word to the charPool and clear it
-        else if (std::isspace(charmander)) {
+        else if (std::isspace(chr)) {
             if (!currentWord.empty()) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            if (charmander == ' ') {
+            if (chr == ' ') {
                 charPool.charPool.push_back(" ");
-            } else if (charmander == '\n') {
+            } else if (chr == '\n') {
                 charPool.charPool.push_back("\n");
-            } else if (charmander == '\t') {
+            } else if (chr == '\t') {
                 charPool.charPool.push_back("\t");
             }
         }
 
         // Check if the character is a special symbol
         // If it is, add the current word to the charPool and clear it
-        else if (specialSymbols.find(charmander) != specialSymbols.end()) {
+        else if (specialSymbols.find(chr) != specialSymbols.end()) {
             if (!currentWord.empty()) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            charPool.charPool.push_back(std::string(1, charmander));
+            charPool.charPool.push_back(std::string(1, chr));
         }
 
         // If the character is not a letter, digit, space, or special symbol
@@ -90,7 +100,7 @@ rustic::CharPool lex(const std::string& charizards) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            charPool.charPool.push_back(std::string(1, charmander));
+            charPool.charPool.push_back(std::string(1, chr));
         }
 
     }
