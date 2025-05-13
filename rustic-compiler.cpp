@@ -43,44 +43,44 @@ std::unordered_set<std::string> identifiers; // Add more identifiers as needed
 std::unordered_set<std::string> strings; // Add more string types as needed
 std::unordered_set<std::string> numbers;
 
-rustic::CharPool lex(const std::string& codeToBeLexed) {
+rustic::CharPool lex(const std::string& charizards) {
     rustic::CharPool charPool;
     std::string currentWord;
 
-    for (char c : codeToBeLexed) {
+    for (char charmander : charizards) {
 
         // Check if the character is a letter or digit
         // If it is, add it to the current word
-        if (std::isalpha(c) || std::isdigit(c)) {
-            currentWord += c;
-        } else if (c == '_') { // Allow underscores in identifiers
-            currentWord += c;
+        if (std::isalpha(charmander) || std::isdigit(charmander)) {
+            currentWord += charmander;
+        } else if (charmander == '_') { // Allow underscores in identifiers
+            currentWord += charmander;
         }
 
         // Check if the character is a space or newline
         // If it is, add the current word to the charPool and clear it
-        else if (std::isspace(c)) {
+        else if (std::isspace(charmander)) {
             if (!currentWord.empty()) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            if (c == ' ') {  
+            if (charmander == ' ') {
                 charPool.charPool.push_back(" ");
-            } else if (c == '\n') {
+            } else if (charmander == '\n') {
                 charPool.charPool.push_back("\n");
-            } else if (c == '\t') {
+            } else if (charmander == '\t') {
                 charPool.charPool.push_back("\t");
             }
         }
 
         // Check if the character is a special symbol
         // If it is, add the current word to the charPool and clear it
-        else if (specialSymbols.find(c) != specialSymbols.end()) {
+        else if (specialSymbols.find(charmander) != specialSymbols.end()) {
             if (!currentWord.empty()) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            charPool.charPool.push_back(std::string(1, c));
+            charPool.charPool.push_back(std::string(1, charmander));
         }
 
         // If the character is not a letter, digit, space, or special symbol
@@ -90,7 +90,7 @@ rustic::CharPool lex(const std::string& codeToBeLexed) {
                 charPool.charPool.push_back(currentWord);
                 currentWord.clear();
             }
-            charPool.charPool.push_back(std::string(1, c));
+            charPool.charPool.push_back(std::string(1, charmander));
         }
 
     }
